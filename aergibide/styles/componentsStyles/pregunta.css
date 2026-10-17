@@ -1,0 +1,66 @@
+/* Contenedor principal: apila todo verticalmente */
+.pregunta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaciado entre la cabecera, cuerpo y pie */
+    width: 60%;
+    padding: 1rem 0;
+    border-top: .1px solid black;
+}
+
+/* 1. Cabecera (Usuario vs Fecha) */
+.pregunta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pregunta-usuario {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el circulo avatar y el nombre */
+    text-decoration: none;
+}
+
+.pregunta-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espacio entre la fecha y los tres puntos */
+}
+
+/* 2. Cuerpo de la pregunta */
+.pregunta-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Espacio entre el título y el texto */
+    text-decoration: none;
+    align-items: flex-start;
+}
+
+.pregunta-body h3, 
+.pregunta-body p {
+    margin: 0; /* Quita márgenes por defecto para controlar la distancia exactas */
+}
+
+/* 3. Pie (Botón y contador al lado) */
+.pregunta-footer {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacio entre el botón morado y "340 respuestas" */
+}
+
+.avatar{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--color-secundario);
+}
+
+.pregunta-footer button, .pregunta-footer i{
+    color: var(--color-blanco);
+}
+
+.pregunta-footer button:hover{
+    cursor:pointer;
+}
+

@@ -1,14 +1,74 @@
+/* variables de colores */
+:root {
+    /* Paleta de colores principal */
+    --color-principal: #5F46CB;
+    --color-secundario: #8878CC;
+    
+    /* Colores neutros */
+    --color-negro: #2B2B2C;
+    --color-blanco: #FFFFFF;
+    
+    /* Colores de estado / semánticos */
+    --color-rojo: #FF7878;
+    --color-verde: #C0DA7D;
+    --color-naranja: #FFD478;
+}
+
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     color: black;
+    font-family: sans-serif;
 }
 
 body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+a{
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+main{
+    flex: auto;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+h1{
+    text-align: center;
+}
+
+input{
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+input:focus {
+    border: none;
+    outline: none;
+}
+
+button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .1rem .5rem;
+    background-color: var(--color-secundario);
+    border-radius: 10px;
+    border: none;
+
 }
 /* FOOTER */
 footer{
@@ -29,10 +89,6 @@ footer ul{
     list-style-type: none;
 }
 
-footer ul a{
-    text-decoration: none;
-}
-
 footer :first-child{
     display: flex;
     align-items: flex-start;
@@ -47,6 +103,10 @@ footer :first-child ul{
     gap: 1rem;
 }
 
+footer a:hover{
+    color: var(--color-principal);
+}
+
 /* HEAD */
 
 header{
@@ -55,15 +115,15 @@ header{
     justify-content: space-between;
     padding: 1rem 2rem;
     border-bottom: 0.1px solid black;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--color-blanco);
 }
 
 .iconosDerechaHeader{
     display: flex;
     gap: 1rem;
-}
-
-main{
-    flex: auto;
 }
 
 i.bi{
