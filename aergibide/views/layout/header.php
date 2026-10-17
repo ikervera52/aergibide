@@ -19,7 +19,7 @@
 
     <div class="iconosDerechaHeader">
         <i class="bi bi-person"></i>
-        <i class="bi bi-box-arrow-right" style="color:red"></i>
+        <i class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
     </div>
 
 </header>

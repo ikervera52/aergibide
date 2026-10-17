@@ -10,6 +10,11 @@ class PreguntaController extends BaseController {
         $this->render("../views/index.view.php", ["preguntas" => $preguntas]);
         
     }
+    public function filter(){
+        $texto = trim($_POST["buscar"] ?? "");
+        $preguntasFiltradas = PreguntaModel::getByContenido(['titulo' => "%$texto%", 'contenido' => "%$texto%"]);
+        $this->render("../views/index.view.php", ["preguntas" => $preguntasFiltradas]);
+    }
     
     public function show() {
         
