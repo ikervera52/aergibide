@@ -15,6 +15,10 @@ class PreguntaController extends BaseController {
         $preguntasFiltradas = PreguntaModel::getByContenido(['titulo' => "%$texto%", 'contenido' => "%$texto%"]);
         $this->render("../views/index.view.php", ["preguntas" => $preguntasFiltradas]);
     }
+
+    public function create(){
+        $this->render("../views/pregunta_form.view.php");
+    }
     
     public function show() {
         

@@ -1,0 +1,62 @@
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 3rem;
+    width: 40%;
+}
+
+#titulo, #contenido{
+    border: .3px solid var(--color-negro);
+    padding: .4rem .6rem;
+}
+
+#contenido{
+    min-height: 10rem;
+}
+
+.acciones{
+    display: flex;
+    gap: 1rem;
+}
+
+.acciones>*{
+    display: flex;
+    align-items: center;
+    background-color: var(--color-secundario);
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    color: var(--color-blanco);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.acciones :first-child{
+    background-color: var(--color-blanco);
+    border: .5px solid var(--color-negro);
+    color: var(--color-negro);
+}
+
+.archivos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 8rem;
+    
+    border: 2px dashed var(--color-principal);
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+/* Efecto hover cuando el usuario pasa el ratón por encima */
+.archivos:hover {
+    background-color: #e6ddfa;
+    border-color: #593196;
+}
+
+/* Ocultar el input nativo de tipo file */
+.archivos input[type="file"] {
+    display: none;
+}

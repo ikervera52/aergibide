@@ -51,7 +51,7 @@ CREATE TABLE respuestas (
   pregunta_id INT NOT NULL,
   usuario_id INT NOT NULL,
   contenido VARCHAR(1000) NOT NULL,
-  puntuacion INT NOT NULL,
+  puntuacion INT NOT NULL DEFAULT 0,
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   seleccionada BOOLEAN NOT NULL DEFAULT FALSE,
   CONSTRAINT fk_respuestas_pregunta 
