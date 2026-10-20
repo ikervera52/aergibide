@@ -21,7 +21,7 @@
         </ul>
 
         <ul class="datosFooter">
-            <li><a href="*">contacto@aergibide.com</a></li>
+            <li><a href="mailto:contacto@aergibide.com">contacto@aergibide.com</a></li>
             <li><a href="*">+34 900 000 000</a></li>
             <li><a href="*">Vitoria-Gasteiz, España</a></li>
         </ul>
