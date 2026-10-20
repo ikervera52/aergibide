@@ -37,6 +37,15 @@ class UsuarioController extends BaseController {
         session_destroy();
         $this->redirect('index.php?controller=UsuarioController');
     }
+
+    public function perfil() {
+        $this->requireLogin();
+
+        $id = $_SESSION['usuario']['id'];
+        $usuario = UsuarioModel::getUserById($id);
+
+        $this->render('perfil.view.php', ['usuario' => $usuario]);
+    }
     
     public function show() {
         
