@@ -11,7 +11,7 @@ class UsuarioController extends BaseController {
             $this->redirect('index.php?controller=PreguntaController');
         }
 
-        $this->render('login.php');
+        $this->render('login.view.php');
     }
 
     public function login() {
@@ -25,6 +25,11 @@ class UsuarioController extends BaseController {
         } else {
             $this->json(['ok' => false]);
         }
+    }
+
+    public function logout() {
+        session_destroy();
+        $this->redirect('index.php?controller=UsuarioController');
     }
     
     public function show() {

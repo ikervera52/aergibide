@@ -1,0 +1,21 @@
+#login{
+    display: flex;
+    flex-direction: column;
+}
+
+button{
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+main{
+    margin-top: 10%;
+}
+
+input{
+    border: solid 1px rgb(157, 157, 157);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 3px;
+}
