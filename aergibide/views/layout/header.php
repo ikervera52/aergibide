@@ -19,7 +19,9 @@
 
     <div class="iconosDerechaHeader">
         <i class="bi bi-person"></i>
-        <i class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
+        <a href="index.php?controller=UsuarioController&accion=logout">
+            <i class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
+        </a>
     </div>
 
 </header>

@@ -18,4 +18,19 @@ class BaseController {
         header("Location: {$url}");
         exit;
     }
+
+
+    // BaseController.php
+    protected function requireLogin() {
+        if (!isset($_SESSION['user_id'])) {
+            $this->redirect('index.php?controller=UsuarioController');
+        }
+    }
+
+
+    protected function json($data) {
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    exit;
+}
 }
