@@ -17,7 +17,7 @@
     <main>
 
     <div class="contenedorBuscador">
-        <h1>Bienvenido, Usuario!</h1> <!-- Falta poner la variable de nombre usuario -->
+        <h1>Bienvenido/a, <?= htmlspecialchars($_SESSION['user_name']) ?>!</h1>
 
         <a class="hacerPregunta" href="index.php?accion=create">Hacer una pregunta <i class="bi bi-person-raised-hand"></i> </a>
 

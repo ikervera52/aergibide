@@ -21,6 +21,8 @@ class UsuarioController extends BaseController {
 
         if ($usuario && $usuario->contrasena == $datos['password']) {
             $_SESSION['user_id'] = $usuario->id;
+            $_SESSION['user_name'] = $usuario->nombre;
+            $_SESSION['user_tipo'] = $usuario->tipo;
             $this->json(['ok' => true]);
         } else {
             $this->json(['ok' => false]);
