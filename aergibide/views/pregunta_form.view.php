@@ -20,12 +20,12 @@
 
         <h1>¿ Cuál es tu duda ?</h1>
         
-        <form action="index.php" method="POST">
+        <form action="index.php" method="POST" enctype="multipart/form-data">
             <label for="titulo">Título</label>
-            <input type="text" name="titulo" id="titulo" placeholder="Título..." required>
+            <input type="text" name="titulo" id="titulo" placeholder="Título..." required value="<?= isset($old['titulo']) ? $old['titulo'] : '' ?>">
 
             <label for="contenido">Pregunta</label>
-            <textarea name="contenido" id="contenido" placeholder="¿Cual es tu duda?" required></textarea>
+            <textarea name="contenido" id="contenido" placeholder="¿Cual es tu duda?" required><?= isset($old['contenido']) ? $old['contenido'] : '' ?></textarea>
 
             <label for="archivo">Archivos</label>
 
@@ -34,8 +34,16 @@
                 <input type="file" id="archivo" name="archivo" multiple>
             </label>
 
+            <?php if(isset($error)) : ?>
+
+                <p><?=$error?></p>
+                
+            <?php endif; ?>
+
             <div class="acciones">
                 <a href="index.php">Cancelar</a>
+                
+                <input type="hidden" name="accion" value="store">
                 <input type="submit" value="Hacer pregunta">
             </div>
         </form>

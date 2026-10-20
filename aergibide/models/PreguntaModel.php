@@ -63,11 +63,17 @@ class PreguntaModel {
     }
     
     public static function create($datos) {
-        
+        $db = Database::getConnection();
+        $stmt = $db->prepare("INSERT INTO preguntas (usuario_id, titulo, contenido) VALUES (:usuario_id, :titulo, :contenido)");
+        $stmt->execute($datos);
+        return $db->lastInsertId(); 
     }
+
     
     public static function deleteById($id) {
-        
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM preguntas WHERE id = :id");
+        $stmt->execute(['id' => $id]);
     }
     
     public static function deleteAll() {

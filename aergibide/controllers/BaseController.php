@@ -22,7 +22,7 @@ class BaseController {
 
     // BaseController.php
     protected function requireLogin() {
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['usuario'])) {
             $this->redirect('index.php?controller=UsuarioController');
         }
     }
