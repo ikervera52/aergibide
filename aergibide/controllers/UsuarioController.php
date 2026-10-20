@@ -6,7 +6,7 @@ class UsuarioController extends BaseController {
     
     public function index() {
 
-        if (isset($_SESSION['user_id'])) {
+        if (isset($_SESSION['usuario'])) {
             // Ya hay sesión: no enseño el login, voy a las preguntas
             $this->redirect('index.php?controller=PreguntaController');
         }
@@ -17,12 +17,16 @@ class UsuarioController extends BaseController {
     public function login() {
         $datos = json_decode(file_get_contents('php://input'), true);
 
-        $usuario = UsuarioModel::getUserByEmail($datos['email']);
+        $usuario = UsuarioModel::getUserByEmail($datos['email'] ?? '');
 
-        if ($usuario && $usuario->contrasena == $datos['password']) {
-            $_SESSION['user_id'] = $usuario->id;
-            $_SESSION['user_name'] = $usuario->nombre;
-            $_SESSION['user_tipo'] = $usuario->tipo;
+        if ($usuario && $usuario->contrasena == ($datos['password'] ?? '')) {
+
+            $_SESSION['usuario'] = [
+                'id'     => $usuario->id,
+                'nombre' => $usuario->nombre,
+                'tipo'   => $usuario->tipo
+            ];
+
             $this->json(['ok' => true]);
         } else {
             $this->json(['ok' => false]);
