@@ -27,8 +27,8 @@ class PreguntaController extends BaseController {
         $titulo = $_POST["titulo"];
         $contenido = $_POST["contenido"];
 
-        if(!isset($_POST["titulo"]) || !isset($_POST["contenido"])){
-            $this->mostrarError("El titulo y la pregunta son requeridas.");
+        if($titulo === "" || $contenido === ""){
+            $this->mostrarError("El titulo y la pregunta son obligatorias.");
         }
 
         $datos = [
@@ -89,7 +89,7 @@ class PreguntaController extends BaseController {
         }
     }
 
-    private function mostrarError($error, $id){
+    private function mostrarError($error, $id = null){
 
         if(isset($id)){
             PreguntaModel::deleteById($id);
@@ -98,6 +98,7 @@ class PreguntaController extends BaseController {
                     "error" => $error,
                     "old" => $_POST
                 ]);
+        die();
     }
 
     public function show() {

@@ -22,10 +22,10 @@
         
         <form action="index.php" method="POST" enctype="multipart/form-data">
             <label for="titulo">Título</label>
-            <input type="text" name="titulo" id="titulo" placeholder="Título..." required value="<?= isset($old['titulo']) ? $old['titulo'] : '' ?>">
+            <input type="text" name="titulo" id="titulo" placeholder="Título..." value="<?= isset($old['titulo']) ? $old['titulo'] : '' ?>">
 
             <label for="contenido">Pregunta</label>
-            <textarea name="contenido" id="contenido" placeholder="¿Cual es tu duda?" required><?= isset($old['contenido']) ? $old['contenido'] : '' ?></textarea>
+            <textarea name="contenido" id="contenido" placeholder="¿Cual es tu duda?"><?= isset($old['contenido']) ? $old['contenido'] : '' ?></textarea>
 
             <label for="archivo">Archivos</label>
 
@@ -36,7 +36,7 @@
 
             <?php if(isset($error)) : ?>
 
-                <p><?=$error?></p>
+                <small style="color: var(--color-rojo);"><?=$error?></small>
                 
             <?php endif; ?>
 
