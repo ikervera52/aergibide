@@ -12,7 +12,8 @@
 <body>
 
 <main>
-    <svg width="148" height="20" viewBox="0 0 148 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="login-container">
+        <svg width="148" height="20" viewBox="0 0 148 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M7.26687 11.1429L6.86951 12.3478H6.88295L5.79387 15.7678H5.74502L4.36281 19.8481H0L7.12722 0H10.815L7.26687 11.1429Z" fill="#2B2B2C"/>
     <path d="M18.9703 19.8747H14.4447L13.1577 15.7944H8.81447L9.95892 12.3744H11.9921L10.9995 9.26465L13.0287 3.20125L18.9703 19.8747Z" fill="#5F46CB"/>
     <path d="M36.1894 3.90912H26.0201V7.93184H35.355V11.222H26.0201V16.0929H36.6588V19.4988H22.0958V0.554714H36.1894V3.90912Z" fill="black"/>
@@ -25,20 +26,19 @@
     <path d="M147.531 3.90912H137.361V7.93184H146.696V11.222H137.361V16.0929H148V19.4988H133.437V0.554714H147.531V3.90912Z" fill="black"/>
     </svg>
 
-    <div id="login">
+    <div class="login">
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Contraseña">
-        <button id="boton">Entrar</button>
+        <button id="boton">Login</button>
     </div>
     
-    <div>
-        <label>Si no tienes cuenta <a href="mailto:contacto@aergibide.com">contactanos</a></label>
+    <div class="info-login">
+        <small>Si no tienes cuenta </small> <small><a href="mailto:contacto@aergibide.com">contactanos</a></small>
     </div>
-    <p id="mensaje"></p>
+    <div>
+    <small style="color: var(--color-rojo)" id="mensaje"></small>
+    </div>
 </main>
-
-
-
 
 
 <script>
@@ -62,6 +62,11 @@ async function hacerLogin() {
     const email = inputEmail.value.trim();
     const password = inputPassword.value;
 
+    if(email === '' || password === '') {
+        mensaje.textContent = 'Por favor, completa todos los campos';
+        return;
+    }
+
     if (datosValidos(email, password)) {
 
         const datos = { email: email, password: password };
@@ -80,9 +85,12 @@ async function hacerLogin() {
         }
 
     } else {
-        mensaje.textContent = 'Email o contraseña con formato no válido';
+        mensaje.textContent = 'Email o contraseña incorrectos';
     }
 }
 
 </script>
+
+<body>
+
 
