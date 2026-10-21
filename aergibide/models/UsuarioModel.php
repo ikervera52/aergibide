@@ -8,7 +8,6 @@ class UsuarioModel {
     }
     
     public static function getUserById($id) {
-        $data = ['id' => $id];
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT 
                                 us.id, us.nombre, us.tipo, us.email, us.datetime,
@@ -16,7 +15,7 @@ class UsuarioModel {
                             FROM usuarios us
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                             WHERE us.id = :id");
-        $stmt->execute($data);
+        $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
 
