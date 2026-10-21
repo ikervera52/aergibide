@@ -26,9 +26,7 @@ class UsuarioModel {
         $stmt->execute($data);
         return $stmt->fetch();     
     }
-    
-    public static function create($datos) {
-        
+    public static function create() {
     }
     
     public static function deleteById($id) {
