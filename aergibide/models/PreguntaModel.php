@@ -70,8 +70,41 @@ class PreguntaModel {
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
     
-    public static function getById($id) {
-        
+    public static function getByUsuarioId($id) {
+        $db = Database::getConnection();
+        $query = $db->prepare("SELECT 
+                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
+                                us.nombre,
+                                fp.ruta_archivo,
+                                COUNT(re.id) AS respuestas_count
+                            FROM preguntas pr
+                            INNER JOIN usuarios us ON pr.usuario_id = us.id
+                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            WHERE pr.usuario_id = :id
+                            GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
+                            ORDER BY pr.datetime DESC");
+        $query->execute(['id' => $id]);
+        return $query->fetchAll();
+    }
+
+    public static function getDestacadasByUsuarioId($id) {
+        $db = Database::getConnection();
+        $query = $db->prepare("SELECT 
+                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
+                                us.nombre,
+                                fp.ruta_archivo,
+                                COUNT(re.id) AS respuestas_count
+                            FROM preguntas_destacadas pd
+                            INNER JOIN preguntas pr ON pd.pregunta_id = pr.id
+                            INNER JOIN usuarios us ON pr.usuario_id = us.id
+                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            WHERE pd.usuario_id = :id
+                            GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
+                            ORDER BY pr.datetime DESC");
+        $query->execute(['id' => $id]);
+        return $query->fetchAll();
     }
     
     public static function create($datos) {

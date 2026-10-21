@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/BaseController.php';
 require_once __DIR__ . '/../models/UsuarioModel.php';
+require_once __DIR__ . '/../models/PreguntaModel.php';
+require_once __DIR__ . '/../models/ArchivoModel.php';
 
 class UsuarioController extends BaseController {
     
@@ -36,6 +38,24 @@ class UsuarioController extends BaseController {
     public function logout() {
         session_destroy();
         $this->redirect('index.php?controller=UsuarioController');
+    }
+
+    public function perfil() {
+        $this->requireLogin();
+
+        $id = $_SESSION['usuario']['id'];
+
+        $usuario = UsuarioModel::getUserById($id);
+        if (!$usuario) {
+            $this->redirect('index.php?controller=UsuarioController&accion=logout');
+        }
+
+        $this->render('perfil.view.php', [
+            'usuario'    => $usuario,
+            'preguntas'  => PreguntaModel::getByUsuarioId($id),
+            'destacadas' => PreguntaModel::getDestacadasByUsuarioId($id),
+            'archivos'   => ArchivoModel::getByUsuarioId($id)
+        ]);
     }
     
     public function show() {

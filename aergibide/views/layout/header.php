@@ -20,7 +20,9 @@
 
 
     <div class="iconosDerechaHeader">
-        <i class="bi bi-person"></i>
+        <a href="index.php?controller=UsuarioController&accion=perfil">
+            <i class="bi bi-person"></i>
+        </a>
         <a href="index.php?controller=UsuarioController&accion=logout">
             <i class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
         </a>

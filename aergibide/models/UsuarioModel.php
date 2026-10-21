@@ -7,8 +7,16 @@ class UsuarioModel {
         
     }
     
-    public static function getById($id) {
-        
+    public static function getUserById($id) {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT 
+                                us.id, us.nombre, us.tipo, us.email, us.datetime,
+                                fp.ruta_archivo
+                            FROM usuarios us
+                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                            WHERE us.id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
     }
 
     public static function getUserByEmail($email) {
