@@ -46,6 +46,48 @@ class PreguntaController extends BaseController {
         $this->redirect("index.php");
     
     }
+
+    public function saveMismaPregunta(){
+        $this->requireLogin();
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $pregunta_id = $data['pregunta_id'] ?? null;
+        $usuario_id = $_SESSION['usuario']['id'] ?? null;
+
+        if ($pregunta_id && $usuario_id) {
+
+            if(PreguntaModel::saveMismaPregunta(['pregunta_id' => $pregunta_id, 'usuario_id' => $usuario_id])){
+                PreguntaModel::sumarMismaPregunta(['pregunta_id' => $pregunta_id]);
+                $this->json(['success' => true]);
+            } else{
+                $this->json(['success' => false, 'message' => 'Error al guardar la misma pregunta']);
+            }
+            
+        } else {
+            $this->json(['success' => false, 'message' => 'Datos incompletos']);
+        }
+    }
+
+    public function removeMismaPregunta(){
+        $this->requireLogin();
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $pregunta_id = $data['pregunta_id'] ?? null;
+        $usuario_id = $_SESSION['usuario']['id'] ?? null;
+
+        if ($pregunta_id && $usuario_id) {
+
+            if(PreguntaModel::removeMismaPregunta(['pregunta_id' => $pregunta_id, 'usuario_id' => $usuario_id])){
+                PreguntaModel::restarMismaPregunta(['pregunta_id' => $pregunta_id]);
+                $this->json(['success' => true]);
+            } else{
+                $this->json(['success' => false, 'message' => 'Error al eliminar la misma pregunta']);
+            }
+            
+        } else {
+            $this->json(['success' => false, 'message' => 'Datos incompletos']);
+        }
+    }
     
     private function guardarArchivo($id) {
             

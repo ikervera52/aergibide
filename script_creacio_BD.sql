@@ -104,16 +104,11 @@ CREATE TABLE notificaciones (
 -- Tabla: preguntas_destacadas
 -- --------------------------------------------------------
 CREATE TABLE preguntas_destacadas (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  usuario_id INT NOT NULL,
-  pregunta_id INT NOT NULL,
-  CONSTRAINT uq_destacada UNIQUE (usuario_id, pregunta_id),
-  CONSTRAINT fk_destacadas_pregunta 
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_destacadas_usuario 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+    pregunta_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    PRIMARY KEY (pregunta_id, usuario_id),
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
 COMMIT;
