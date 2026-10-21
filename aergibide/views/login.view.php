@@ -31,10 +31,11 @@
         <button id="boton">Entrar</button>
     </div>
     
-
+    <div>
+        <label>Si no tienes cuenta <a href="mailto:contacto@aergibide.com">contactanos</a></label>
+    </div>
     <p id="mensaje"></p>
 </main>
-
 
 
 
@@ -85,4 +86,3 @@ async function hacerLogin() {
 
 </script>
 
-<?php require __DIR__ . '/layout/footer.php'; ?>

@@ -16,14 +16,14 @@
 
         <ul class="menuFooter">
             <li><a href="*">Mi perfil</a></li>
-            <li><a href="*">Inicio</a></li>
+            <li><a href="index.php">Inicio</a></li>
             <li><a href="*">Contacto</a></li>
         </ul>
 
         <ul class="datosFooter">
-            <li><a href="mailto:contacto@aergibide.com">contacto@aergibide.com</a></li>
-            <li><a href="*">+34 900 000 000</a></li>
-            <li><a href="*">Vitoria-Gasteiz, España</a></li>
+            <li><a href="mailto:contacto@aergibide.com" target="_blank">contacto@aergibide.com</a></li>
+            <li><a href="tel:+34900000000">+34 900 000 000</a></li>
+            <li><a href="https://maps.app.goo.gl/oHSYYMqYZSBjfvpJ9" target="_blank">Vitoria-Gasteiz, España</a></li>
         </ul>
     </div>
 
