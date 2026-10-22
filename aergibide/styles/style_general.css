@@ -70,6 +70,10 @@ button{
     border: none;
 
 }
+
+button, button >i {
+    color: var(--color-blanco);
+}
 /* FOOTER */
 footer{
     display: flex;

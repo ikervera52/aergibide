@@ -76,15 +76,20 @@ class PreguntaModel {
                                 pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
                                 us.nombre,
                                 fp.ruta_archivo,
-                                COUNT(re.id) AS respuestas_count
+                                COUNT(re.id) AS respuestas_count,
+                                CASE 
+                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
+                                        ELSE 0 
+                                    END AS marcada_por_usuario
                             FROM preguntas pr
                             INNER JOIN usuarios us ON pr.usuario_id = us.id
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
                             WHERE pr.usuario_id = :id
                             GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
                             ORDER BY pr.datetime DESC");
-        $query->execute(['id' => $id]);
+        $query->execute(['id' => $id, 'usuario_id' => $_SESSION['usuario']['id']]);
         return $query->fetchAll();
     }
 
@@ -94,7 +99,11 @@ class PreguntaModel {
                                 pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
                                 us.nombre,
                                 fp.ruta_archivo,
-                                COUNT(re.id) AS respuestas_count
+                                COUNT(re.id) AS respuestas_count,
+                                CASE 
+                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
+                                        ELSE 0 
+                                    END AS marcada_por_usuario
                             FROM preguntas_destacadas pd
                             INNER JOIN preguntas pr ON pd.pregunta_id = pr.id
                             INNER JOIN usuarios us ON pr.usuario_id = us.id

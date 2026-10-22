@@ -13,6 +13,7 @@ class ArchivoModel {
                             ORDER BY a.id DESC");
         $query->execute(['id1' => $id, 'id2' => $id]);
         return $query->fetchAll();
+    } 
     
     public static function getAll() {
         

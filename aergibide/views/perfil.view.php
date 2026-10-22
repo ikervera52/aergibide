@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aergibide</title>
+    <title>Aergibide | Perfil</title>
     <link rel="stylesheet" href="styles/style_general.css">
+    <link rel="stylesheet" href="styles/componentsStyles/pregunta.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/viewsStyles/perfil.view.css?v=<?php echo filemtime('styles/viewsStyles/perfil.view.css'); ?>">
 </head>
@@ -41,14 +42,14 @@
     <!-- 1. Preguntas del usuario -->
     <section id="preguntas" class="seccion">
         <?php foreach ($preguntas as $pregunta): ?>
-            <?php require __DIR__ . '/components/pregunta.php'; ?>
+            <?php require "components/pregunta.php";?>
         <?php endforeach; ?>
         <?php if (empty($preguntas)): ?>
             <p>Aún no has hecho preguntas.</p>
         <?php endif; ?>
     </section>
 
-    <!-- 2. Preguntas destacadas (likes) -->
+    <!-- 2. Preguntas destacadas -->
     <section id="destacadas" class="seccion" hidden>
         <?php foreach ($destacadas as $pregunta): ?>
             <?php require __DIR__ . '/components/pregunta.php'; ?>
