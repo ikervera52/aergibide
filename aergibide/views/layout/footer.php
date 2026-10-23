@@ -15,9 +15,9 @@
 
 
         <ul class="menuFooter">
-            <li><a href="*">Mi perfil</a></li>
+            <li><a href="index.php?controller=UsuarioController&accion=perfil">Mi perfil</a></li>
             <li><a href="index.php">Inicio</a></li>
-            <li><a href="*">Contacto</a></li>
+            <li><a href="mailto:contacto@aergibide.com">Contacto</a></li>
         </ul>
 
         <ul class="datosFooter">
