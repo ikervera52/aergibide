@@ -4,7 +4,14 @@ require_once __DIR__ . '/Database.php';
 class UsuarioModel {
     
     public static function getAll() {
-        
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT id, nombre, email, tipo
+                              FROM usuarios");
+        $stmt -> execute();
+
+        $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultado;
     }
     
     public static function getUserById($id) {
@@ -26,11 +33,18 @@ class UsuarioModel {
         $stmt->execute($data);
         return $stmt->fetch();     
     }
-    public static function create() {
+    public static function create(array $usuario) {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("INSERT INTO usuarios
+                              (nombre, tipo, email, contrasena)
+                              VALUES (:nombre, :tipo, :email, :password)");
+        $stmt -> execute($usuario);                      
     }
     
     public static function deleteById($id) {
-        
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM usuarios WHERE id = :id");
+        $stmt->execute($id);
     }
     
     public static function deleteAll() {
