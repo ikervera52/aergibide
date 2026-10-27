@@ -117,6 +117,8 @@ class UsuarioController extends BaseController {
         }
 
         $this->render("edit_usuario.view.php", ["usuario" => $usuario]);
+    }
+    
     public function actualizar() {
         $this->requireLogin();
 

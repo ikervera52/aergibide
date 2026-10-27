@@ -45,6 +45,8 @@ class UsuarioModel {
         $db = Database::getConnection();
         $stmt = $db->prepare("DELETE FROM usuarios WHERE id = :id");
         $stmt->execute($id);
+    }
+    
     public static function emailEnUso($email, $idExcluir) {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT id FROM usuarios WHERE email = :email AND id != :id");
