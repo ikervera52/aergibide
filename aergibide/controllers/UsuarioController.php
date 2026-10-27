@@ -60,16 +60,24 @@ class UsuarioController extends BaseController {
     
     public function show() {
         $usuarios = UsuarioModel::getAll();
-        $this->render('menuadmin.view.php', ["usuarios" => $usuarios]);
+        $this->render('menuadmin.view.php', [
+            "usuarios" => $usuarios
+            ]);
         
     }
     
     public function store() {
+        $nombre = $_GET["nombre"] ?? "";
+        $email = $_GET["email"] ?? "";
+        $tipo = $_GET["tipo"] ?? "";
+        $password = $_GET["password"] ?? "";
+
+
         $usuario = [
-            "nombre" => $_GET["nombre"],
-            "email" => $_GET["email"],
-            "tipo" => $_GET["tipo"],
-            "password" => $_GET["password"]  
+            "nombre" => $nombre,
+            "email" => $email,
+            "tipo" => $tipo,
+            "password" => $password  
         ];
         UsuarioModel::create($usuario);
         BaseController::redirect("index.php?controller=UsuarioController&accion=show");
@@ -86,4 +94,5 @@ class UsuarioController extends BaseController {
     public function edit() {
         
     }
+
 }

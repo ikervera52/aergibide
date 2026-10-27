@@ -64,18 +64,80 @@
     </div>
     <div>
         
-    <form action="index.php" method="get">
+    <form id="formUsuario" action="index.php" method="get" novalidate>
         <fieldset>
             <legend>Nuevo Usuario</legend>
-            <input type="text" name="nombre" placeholder="Nombre"><br>
-            <input type="email" name="email" placeholder="Email"><br>
-            <input type="text" name="tipo" placeholder="Tipo"><br>
-            <input type="text" name="password" placeholder="Password"><br>
+
+        <input type="text" name="nombre" placeholder="Nombre">
+        <span class="error"></span>
+
+        <input type="email" name="email" placeholder="Email">
+        <span class="error"></span>
+
+        <select name="tipo">
+            <option value="admin" selected>admin</option>
+            <option value="standar">standar</option>
+        </select>
+        <span class="error"></span>
+
+        <input type="password" name="password" placeholder="Password">
+        <span class="error"></span>
+
+
             <button type="submit" value="anidar">Registrar</button>
             <input type="hidden" name="controller" value="UsuarioController">
             <input type="hidden" name="accion" value="store">
         </fieldset>
     </form>
+        <style>
+            #formUsuario .error {
+                display: block;
+                color: red;
+                font-size: 0.85em;
+                min-height: 1.2em;
+            }
+        </style>
+
+        <script>
+            const reglas = {
+                nombre:   /^[A-Z][a-z]{4,14}$/,
+                email:    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                tipo:     /^(admin|standar)$/,
+                password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$/
+            };
+
+            const form = document.getElementById("formUsuario");
+
+            function validarCampo(nombre) {
+                const campo = form.elements[nombre];
+                const aviso = campo.nextElementSibling; // el <span> que va justo debajo
+                const valido = reglas[nombre].test(campo.value);
+
+                aviso.textContent = valido ? "" : "Dato incorrecto";
+                return valido;
+            }
+
+            form.addEventListener("submit", function (e) {
+                let todoOk = true;
+
+                for (const nombre in reglas) {
+                    if (!validarCampo(nombre)) {
+                        todoOk = false;
+                    }
+                }
+
+                if (!todoOk) {
+                    e.preventDefault(); // no envía el formulario si algo falla
+                }
+                });
+
+                // Opcional: revalida cada campo al salir de él
+                for (const nombre in reglas) {
+                    form.elements[nombre].addEventListener("blur", () => validarCampo(nombre));
+                }
+        </script>
+
+
     </div>
     </main>
 
