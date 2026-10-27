@@ -28,6 +28,12 @@ class ArchivoModel {
         $stmt = $db->prepare("INSERT INTO archivos (pregunta_id, nombre, ruta_archivo, mime_tipo, tamano) VALUES (:pregunta_id, :nombre, :ruta_archivo, :mime_tipo, :tamano)");
         $stmt->execute($datos);
     }
+
+    public static function createRespuesta($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("INSERT INTO archivos (respuesta_id, nombre, ruta_archivo, mime_tipo, tamano) VALUES (:respuesta_id, :nombre, :ruta_archivo, :mime_tipo, :tamano)");
+        $stmt->execute($datos);
+    }
     
     public static function deleteById($id) {
         
