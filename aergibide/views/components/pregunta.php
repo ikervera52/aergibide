@@ -1,6 +1,7 @@
-<article class="pregunta">
+<article class="pregunta" data-pregunta-id="<?=$pregunta->id?>" data-usuario-id="<?= (int)$pregunta->usuario_id ?>">
+    <!-- Cabecera: Usuario a la izquierda, Fecha a la derecha -->
     <div class="pregunta-header">
-        <a href="index.php?controller=usuarioController" class="pregunta-usuario">
+        <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$pregunta->usuario_id ?>" class="pregunta-usuario">
             <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$pregunta->ruta_archivo?>" alt="Foto de perfil">
             <small><?=$pregunta->nombre?></small>
         </a>
