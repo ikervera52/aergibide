@@ -76,6 +76,47 @@ class UsuarioController extends BaseController {
         ]);
     }
     
+    public function show() {
+        $usuarios = UsuarioModel::getAll();
+        $this->render('menuadmin.view.php', [
+            "usuarios" => $usuarios
+            ]);
+        
+    }
+    
+    public function store() {
+        $nombre = $_GET["nombre"] ?? "";
+        $email = $_GET["email"] ?? "";
+        $tipo = $_GET["tipo"] ?? "";
+        $password = $_GET["password"] ?? "";
+
+
+        $usuario = [
+            "nombre" => $nombre,
+            "email" => $email,
+            "tipo" => $tipo,
+            "password" => $password  
+        ];
+        UsuarioModel::create($usuario);
+        BaseController::redirect("index.php?controller=UsuarioController&accion=show");
+    }
+    
+    public function destroy() {
+        $id = [
+            "id" => $_GET["id"]
+        ];
+        UsuarioModel::deleteById($id);
+        BaseController::redirect("index.php?controller=UsuarioController&accion=show");
+    }
+    
+    public function edit() {
+        $usuario = UsuarioModel::getUserById($_GET["id"] ?? 0);
+
+        if(!$usuario){
+           $this->redirect("index.php?controller=UsuarioController&accion=show");
+        }
+
+        $this->render("edit_usuario.view.php", ["usuario" => $usuario]);
     public function actualizar() {
         $this->requireLogin();
 
@@ -162,4 +203,20 @@ class UsuarioController extends BaseController {
 
         return null;
     }
+
+    public function update(){
+        UsuarioModel::update([
+            "id"       => $_GET["id"] ?? "",
+            "nombre"   => $_GET["nombre"] ?? "",
+            "email"    => $_GET["email"] ?? "",
+            "tipo"     => $_GET["tipo"] ?? "",
+            "password" => $_GET["password"] ?? ""
+        ]);
+       
+        $this->redirect("index.php?controller=UsuarioController&accion=show");
+
+    }
+
+
+
 }
