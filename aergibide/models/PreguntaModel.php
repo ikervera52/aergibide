@@ -8,50 +8,41 @@ class PreguntaModel {
 
         $query = $db->prepare("SELECT 
                                     pr.id,
+                                    pr.usuario_id,
                                     pr.titulo, 
                                     pr.contenido, 
                                     pr.datetime, 
                                     us.nombre,
                                     fp.ruta_archivo,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
-                                    CASE 
-                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
-                                        ELSE 0 
-                                    END AS marcada_por_usuario
+                                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
                                 FROM preguntas pr 
                                 INNER JOIN usuarios us ON pr.usuario_id = us.id
-                                INNER JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                                 LEFT JOIN respuestas re ON pr.id = re.pregunta_id
                                 LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
                                 GROUP BY 
-                                    pr.id, 
-                                    pr.titulo, 
-                                    pr.contenido, 
-                                    pr.datetime, 
-                                    us.nombre, 
-                                    fp.ruta_archivo,
-                                    pd.usuario_id;");
-        
+                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
+                                    us.nombre, fp.ruta_archivo, pd.usuario_id
+                                ORDER BY pr.datetime DESC");
+
         $query->execute(['usuario_id' => $_SESSION['usuario']['id']]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
     public static function getByContenido($texto) {
-
         $db = Database::getConnection();
 
         $query = $db->prepare("SELECT 
                                     pr.id,
+                                    pr.usuario_id,
                                     pr.titulo, 
                                     pr.contenido, 
                                     pr.datetime, 
                                     us.nombre,
                                     fp.ruta_archivo,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
-                                    CASE 
-                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
-                                        ELSE 0 
-                                    END AS marcada_por_usuario
+                                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
                                 FROM preguntas pr 
                                 INNER JOIN usuarios us ON pr.usuario_id = us.id
                                 LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
@@ -59,36 +50,38 @@ class PreguntaModel {
                                 LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
                                 WHERE pr.contenido LIKE :contenido OR pr.titulo LIKE :titulo
                                 GROUP BY 
-                                    pr.id, 
-                                    pr.titulo, 
-                                    pr.contenido, 
-                                    pr.datetime, 
-                                    us.nombre, 
-                                    fp.ruta_archivo,
-                                    pd.usuario_id;");
+                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
+                                    us.nombre, fp.ruta_archivo, pd.usuario_id
+                                ORDER BY pr.datetime DESC");
+
         $query->execute($texto + ['usuario_id' => $_SESSION['usuario']['id']]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
-    
+
     public static function getByUsuarioId($id) {
         $db = Database::getConnection();
         $query = $db->prepare("SELECT 
-                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
-                                us.nombre,
-                                fp.ruta_archivo,
-                                COUNT(re.id) AS respuestas_count,
-                                CASE 
-                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
-                                        ELSE 0 
-                                    END AS marcada_por_usuario
-                            FROM preguntas pr
-                            INNER JOIN usuarios us ON pr.usuario_id = us.id
-                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
-                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
-                            LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
-                            WHERE pr.usuario_id = :id
-                            GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
-                            ORDER BY pr.datetime DESC");
+                                    pr.id,
+                                    pr.usuario_id,
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    pr.misma_pregunta,
+                                    us.nombre,
+                                    fp.ruta_archivo,
+                                    COUNT(DISTINCT re.id) AS respuestas_count,
+                                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
+                                FROM preguntas pr
+                                INNER JOIN usuarios us ON pr.usuario_id = us.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                                LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                                WHERE pr.usuario_id = :id
+                                GROUP BY 
+                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, 
+                                    us.nombre, fp.ruta_archivo, pd.usuario_id
+                                ORDER BY pr.datetime DESC");
+
         $query->execute(['id' => $id, 'usuario_id' => $_SESSION['usuario']['id']]);
         return $query->fetchAll();
     }
@@ -96,23 +89,29 @@ class PreguntaModel {
     public static function getDestacadasByUsuarioId($id) {
         $db = Database::getConnection();
         $query = $db->prepare("SELECT 
-                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
-                                us.nombre,
-                                fp.ruta_archivo,
-                                COUNT(re.id) AS respuestas_count,
-                                CASE 
-                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
-                                        ELSE 0 
-                                    END AS marcada_por_usuario
-                            FROM preguntas_destacadas pd
-                            INNER JOIN preguntas pr ON pd.pregunta_id = pr.id
-                            INNER JOIN usuarios us ON pr.usuario_id = us.id
-                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
-                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
-                            WHERE pd.usuario_id = :id
-                            GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
-                            ORDER BY pr.datetime DESC");
-        $query->execute(['id' => $id]);
+                                    pr.id,
+                                    pr.usuario_id,
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    pr.misma_pregunta,
+                                    us.nombre,
+                                    fp.ruta_archivo,
+                                    COUNT(DISTINCT re.id) AS respuestas_count,
+                                    CASE WHEN yo.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
+                                FROM preguntas_destacadas pd
+                                INNER JOIN preguntas pr ON pd.pregunta_id = pr.id
+                                INNER JOIN usuarios us ON pr.usuario_id = us.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                                LEFT JOIN preguntas_destacadas yo ON pr.id = yo.pregunta_id AND yo.usuario_id = :yo
+                                WHERE pd.usuario_id = :id
+                                GROUP BY 
+                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, 
+                                    us.nombre, fp.ruta_archivo, yo.usuario_id
+                                ORDER BY pr.datetime DESC");
+
+        $query->execute(['id' => $id, 'yo' => $_SESSION['usuario']['id']]);
         return $query->fetchAll();
     }
     

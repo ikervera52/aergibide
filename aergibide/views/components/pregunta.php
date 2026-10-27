@@ -1,7 +1,7 @@
-<article class="pregunta">
+<article class="pregunta" data-pregunta-id="<?=$pregunta->id?>" data-usuario-id="<?= (int)$pregunta->usuario_id ?>">
     <!-- Cabecera: Usuario a la izquierda, Fecha a la derecha -->
     <div class="pregunta-header">
-        <a href="index.php?controller=usuarioController" class="pregunta-usuario">
+        <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$pregunta->usuario_id ?>" class="pregunta-usuario">
             <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$pregunta->ruta_archivo?>" alt="Foto de perfil">
             <small><?=$pregunta->nombre?></small>
         </a>
@@ -42,6 +42,13 @@ async function guardarMismaPregunta(preguntaId, btnMismaPregunta) {
             
         if(response.ok){
                 btnMismaPregunta.classList.remove("seleccionada");  
+                document.querySelectorAll('article[data-pregunta-id="' + preguntaId + '"] .pregunta-footer button')
+                    .forEach(b => b.classList.remove("seleccionada"));
+                const destacadas = document.querySelector("#destacadas");
+                if(destacadas){
+                    const copia = destacadas.querySelector('article[data-pregunta-id="' + preguntaId + '"]');
+                    if(copia) copia.remove();
+                }
             }else{
                 alert("Problemas con el servidor. Intentalo más tarde.");
             }
@@ -57,6 +64,10 @@ async function guardarMismaPregunta(preguntaId, btnMismaPregunta) {
 
         if(response.ok){
             btnMismaPregunta.classList.add("seleccionada");  
+            const destacadas = document.querySelector("#destacadas");
+            if(destacadas && !destacadas.querySelector('article[data-pregunta-id="' + preguntaId + '"]')){
+                destacadas.prepend(btnMismaPregunta.closest("article").cloneNode(true));
+            }
         }else{
             alert("Problemas con el servidor. Intentalo más tarde.");
         }
