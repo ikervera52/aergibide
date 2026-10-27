@@ -50,4 +50,30 @@ class UsuarioModel {
     public static function deleteAll() {
         
     }
+
+    public static function update($datos){
+        $db = Database::getConnection();
+        
+        if ($datos["password"] === "") {
+        // Sin contraseña nueva: se mantiene la actual
+        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo WHERE id = :id";
+        $params = [
+            ":nombre" => $datos["nombre"],
+            ":email"  => $datos["email"],
+            ":tipo"   => $datos["tipo"],
+            ":id"     => $datos["id"]
+        ];
+        } else {
+        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo, contrasena = :password WHERE id = :id";   
+        $params = [
+            ":nombre"   => $datos["nombre"],
+            ":email"    => $datos["email"],
+            ":tipo"     => $datos["tipo"],
+            ":password" => $datos["password"],
+            ":id"       => $datos["id"]
+        ];
+        }
+
+        $db->prepare($sql)->execute($params);
+    }
 }

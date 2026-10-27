@@ -92,7 +92,28 @@ class UsuarioController extends BaseController {
     }
     
     public function edit() {
-        
+        $usuario = UsuarioModel::getUserById($_GET["id"] ?? 0);
+
+        if(!$usuario){
+           $this->redirect("index.php?controller=UsuarioController&accion=show");
+        }
+
+        $this->render("edit_usuario.view.php", ["usuario" => $usuario]);
     }
+
+    public function update(){
+        UsuarioModel::update([
+            "id"       => $_GET["id"] ?? "",
+            "nombre"   => $_GET["nombre"] ?? "",
+            "email"    => $_GET["email"] ?? "",
+            "tipo"     => $_GET["tipo"] ?? "",
+            "password" => $_GET["password"] ?? ""
+        ]);
+       
+        $this->redirect("index.php?controller=UsuarioController&accion=show");
+
+    }
+
+
 
 }
