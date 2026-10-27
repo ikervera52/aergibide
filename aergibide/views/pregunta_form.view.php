@@ -31,7 +31,7 @@
 
             <label for="archivo" class="archivos" id="archivos">
                 <span id="texto-archivo">Arrastra tu archivo aquí</span>
-                <input type="file" id="archivo" name="archivo" multiple>
+                <input type="file" id="archivo" name="archivo">
             </label>
 
             <?php if(isset($error)) : ?>
@@ -43,6 +43,7 @@
             <div class="acciones">
                 <a href="index.php">Cancelar</a>
                 
+                <input type="hidden" name="tipo-interaccion" value="pregunta">
                 <input type="hidden" name="accion" value="store">
                 <input type="submit" value="Hacer pregunta">
             </div>

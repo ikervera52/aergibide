@@ -68,3 +68,15 @@
     background-color: var(--color-principal) !important;
 }
 
+.pregunta-resuelta{
+    display: flex;
+    align-items: center;
+    background-color: var(--color-verde);
+    padding: .1rem .5rem;
+    border-radius: 10px;
+    gap: .4rem;
+}
+
+.pregunta-resuelta>*{
+    color: var(--color-blanco);
+}

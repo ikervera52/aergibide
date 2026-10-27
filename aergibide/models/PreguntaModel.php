@@ -11,6 +11,7 @@ class PreguntaModel {
                                     pr.titulo, 
                                     pr.contenido, 
                                     pr.datetime, 
+                                    pr.estado,
                                     us.nombre,
                                     fp.ruta_archivo,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
@@ -36,6 +37,42 @@ class PreguntaModel {
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public static function getById($id) {
+        $db = Database::getConnection();
+        $query = $db->prepare("SELECT 
+                                    pr.id,
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    pr.estado,
+                                    us.nombre,
+                                    fp.ruta_archivo,
+                                    ar.ruta_archivo AS ruta_archivo_adjunto,
+                                    COUNT(DISTINCT re.id) AS respuestas_count,
+                                    CASE 
+                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
+                                        ELSE 0 
+                                    END AS marcada_por_usuario
+                                FROM preguntas pr 
+                                INNER JOIN usuarios us ON pr.usuario_id = us.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                                LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                                LEFT JOIN archivos ar ON pr.id = ar.pregunta_id
+                                WHERE pr.id = :id
+                                GROUP BY 
+                                    pr.id, 
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    us.nombre, 
+                                    fp.ruta_archivo,
+                                    pd.usuario_id,
+                                    ar.ruta_archivo;");
+        $query->execute(['id' => $id, 'usuario_id' => $_SESSION['usuario']['id']]);
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
+
     public static function getByContenido($texto) {
 
         $db = Database::getConnection();
@@ -44,6 +81,7 @@ class PreguntaModel {
                                     pr.id,
                                     pr.titulo, 
                                     pr.contenido, 
+                                    pr.estado,
                                     pr.datetime, 
                                     us.nombre,
                                     fp.ruta_archivo,
@@ -73,7 +111,7 @@ class PreguntaModel {
     public static function getByUsuarioId($id) {
         $db = Database::getConnection();
         $query = $db->prepare("SELECT 
-                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
+                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
                                 us.nombre,
                                 fp.ruta_archivo,
                                 COUNT(re.id) AS respuestas_count,
@@ -96,7 +134,7 @@ class PreguntaModel {
     public static function getDestacadasByUsuarioId($id) {
         $db = Database::getConnection();
         $query = $db->prepare("SELECT 
-                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta,
+                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
                                 us.nombre,
                                 fp.ruta_archivo,
                                 COUNT(re.id) AS respuestas_count,
