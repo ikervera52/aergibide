@@ -172,8 +172,7 @@ i.bi{
     position: fixed;
     top: 55px;
     left: 0;
-    width: 40%;
-    min-width: 300px;
+    width: 20rem;
     height: calc(100% - 55px);
     overflow-y: auto;
     background-color: var(--color-blanco);
