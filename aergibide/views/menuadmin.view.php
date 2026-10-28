@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/viewsStyles/index.view.css">
     <link rel="stylesheet" href="styles/componentsStyles/pregunta.css">
+    <link rel="stylesheet" href="styles/componentsStyles/formulario_usuario.css">
+    <link rel="stylesheet" href="styles/viewsStyles/menuadmin.view.css">
     <!-- Biblioteca de Iconos-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -15,20 +17,25 @@
 <?php require "layout/header.php"; ?>
 
     <main>
-
+        <?php
+        $pestana = ($_GET["pestaña"] ?? "gestion") === "destacadas" ? "destacadas" : "gestion";
+        ?>
 
         <nav class="pestañas">
-            <button type="button" id="btngestionUsuarios" class="pestana activa" onclick="mostrargestionUsuarios()">Gestion Usuarios</button>
-            <button type="button" id="btnpreguntasDestacadas" class="pestana" onclick="mostrarpreguntasDestacadas()">Preguntas Destacadas</button>
+            <a href="index.php?controller=UsuarioController&accion=show&pestaña=gestion"
+                class="pestana <?= $pestana === "gestion" ? "activa" : "" ?>">Gestion Usuarios</a>
+            <a href="index.php?controller=UsuarioController&accion=show&pestaña=destacadas"
+                class="pestana <?= $pestana === "destacadas" ? "activa" : "" ?>">Mayores Dudas</a>
         </nav>
 
-        <section id="gestionUsuarios" class="seccion">
+        
+        <section id="gestionUsuarios" class="seccion" <?= $pestana !== "gestion" ? "hidden" : "" ?>>
             <div>
             <div class="contenedorBuscador">
                 
-                <form class="buscador" action="index.php" method="POST">
+                <form class="buscador" action="index.php?controller=UsuarioController&accion=filter" method="POST">
                     <div>
-                        <input type="text" name="buscar" id="buscar" placeholder="Que quieres buscar...">
+                        <input type="text" name="buscar" id="buscar" placeholder="Que email quieres buscar...">
                         <input type="hidden" name="accion" value="filter">
                         <button class="btn-buscar" type="submit"><i class="bi bi-search"></i></button>
                     </div>
@@ -38,33 +45,37 @@
                 </form>
             </div>
             <table>
-                <tr><td>Nombre</td><td>Email</td><td>Tipo</td><td>Acciones</td></tr>
                 <?php if(isset($usuarios)):?>
-                    <?php foreach($usuarios as $valor):?>
-                        <tr><td><?= $valor["nombre"]?>
-                        </td><td><?= $valor["email"]?></td>
-                        <td><?= $valor["tipo"]?></td>
+                    <?php if (empty($usuarios)): ?>
+                                <p>No se encontró ningún usuario con ese email.</p>
+                            <?php else: ?>
+                                <tr><th>Nombre</th><th>Email</th><th>Tipo</th><th>Acciones</th></tr>
+                            <?php foreach($usuarios as $valor):?>
+                                <tr><td><?= $valor["nombre"]?>
+                                </td><td><?= $valor["email"]?></td>
+                                <td><?= $valor["tipo"]?></td>
 
-                        <td>
-                            <!-- EDITAR: redirige a la página de edición con el id -->
-                            <form action="index.php" method="get" >
-                                <input type="hidden" name="controller" value="UsuarioController">
-                                <input type="hidden" name="accion" value="edit">
-                                <input type="hidden" name="id" value="<?= $valor['id'] ?>">
-                                <button type="submit">Editar</button>
-                            </form>
+                                <td>
+                                    <!-- EDITAR: redirige a la página de edición con el id -->
+                                    <form action="index.php" method="get" >
+                                        <input type="hidden" name="controller" value="UsuarioController">
+                                        <input type="hidden" name="accion" value="edit">
+                                        <input type="hidden" name="id" value="<?= $valor['id'] ?>"> 
+                                        <button type="submit" style="background: var(--color-naranja); color: var(--color-negro)">Editar</button>
+                                    </form>
 
-                            <!-- ELIMINAR: borra el usuario con ese id -->
-                            <form action="index.php" method="get" >
-                                <input type="hidden" name="controller" value="UsuarioController">
-                                <input type="hidden" name="accion" value="destroy">
-                                <input type="hidden" name="id" value="<?= $valor['id'] ?>">
-                                <button type="submit">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
+                                    <!-- ELIMINAR: borra el usuario con ese id -->
+                                    <form action="index.php" method="get" >
+                                        <input type="hidden" name="controller" value="UsuarioController">
+                                        <input type="hidden" name="accion" value="destroy">
+                                        <input type="hidden" name="id" value="<?= $valor['id'] ?>">
+                                        <button type="submit" style="background: var(--color-rojo)">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
                         
-                    <?php endforeach;?>
+                        <?php endforeach;?>
+                    <?php endif; ?>
                 <?php endif; ?>    
             </table>
             </div>
@@ -73,37 +84,16 @@
             </div>
         </section>
         
-        <section id="preguntasDestacadas" class="seccion" hidden>
-            <h1>Hola</h1>
+        <section id="preguntasDestacadas" class="seccion" <?= $pestana !== "destacadas" ? "hidden" : "" ?>>   
+            <?php foreach($preguntas as $pregunta) :
+            
+            
+                require "components/pregunta.php";
+        
+            endforeach; ?>
         </section>
 
     </main>
-
-    <script>
-        const btngestionUsuarios = document.querySelector('#btngestionUsuarios');
-        const btnpreguntasDestacadas = document.querySelector('#btnpreguntasDestacadas');
-
-
-        const secciongestionUsuarios = document.querySelector('#gestionUsuarios');
-        const seccionpreguntasDestacadas = document.querySelector('#preguntasDestacadas');
-
-        function mostrargestionUsuarios(){
-            secciongestionUsuarios.hidden = false;
-            seccionpreguntasDestacadas.hidden = true;
-
-            btngestionUsuarios.classList.add('activa');
-            btnpreguntasDestacadas.classList.remove('activa');
-        }
-
-        function mostrarpreguntasDestacadas(){
-            secciongestionUsuarios.hidden = true;
-            seccionpreguntasDestacadas.hidden = false;
-
-            btngestionUsuarios.classList.remove('activa');
-            btnpreguntasDestacadas.classList.add('activa');
-        }
-
-    </script>
     <?php require "layout/footer.php"; ?>
 
 </body>

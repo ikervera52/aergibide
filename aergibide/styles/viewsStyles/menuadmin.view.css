@@ -1,0 +1,82 @@
+/* ---------- Pestañas ---------- */
+.pestañas {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.pestana {
+    padding-bottom: .4rem;
+    border-bottom: 2px solid transparent;
+    font-size: .95rem;
+}
+
+.pestana.activa {
+    border-bottom-color: var(--color-negro);
+}
+
+/* ---------- Layout de las secciones ---------- */
+.seccion {
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Dos columnas solo en Gestión de usuarios */
+#gestionUsuarios:not([hidden]) {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* Mayores dudas: una sola columna, a todo el ancho */
+#preguntasDestacadas:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+}
+
+/* display:grid y display:flex anulan el atributo hidden, hay que restaurarlo */
+.seccion[hidden] {
+    display: none;
+}
+
+/* display:grid anula el atributo hidden, hay que restaurarlo */
+.seccion[hidden] {
+    display: none;
+}
+
+/* ---------- Tabla ---------- */
+.seccion table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9rem;
+}
+
+.seccion th {
+    background: var(--color-secundario);
+    color: var(--color-blanco);
+    font-weight: 400;
+    text-align: left;
+    padding: .5rem 1rem;
+}
+
+.seccion td {
+    padding: .8rem 1rem;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.seccion td form {
+    display: inline-block;
+    margin-right: .3rem;
+}
+
+.btn-editar,
+.btn-eliminar {
+    padding: .25rem .8rem;
+    border-radius: 6px;
+    font-size: .75rem;
+    cursor: pointer;
+}
+

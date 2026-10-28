@@ -183,4 +183,35 @@ class PreguntaModel {
     public static function deleteAll() {
         
     }
+
+    public static function getTop20() {
+    $db = Database::getConnection();
+
+    $query = $db->prepare("SELECT 
+                                pr.id,
+                                pr.usuario_id,
+                                pr.titulo, 
+                                pr.contenido, 
+                                pr.datetime, 
+                                pr.estado,
+                                us.nombre,
+                                fp.ruta_archivo,
+                                COUNT(DISTINCT re.id) AS respuestas_count,
+                                COUNT(DISTINCT pv.usuario_id) AS votos,
+                                CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
+                            FROM preguntas pr 
+                            INNER JOIN usuarios us ON pr.usuario_id = us.id
+                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                            LEFT JOIN preguntas_destacadas pv ON pr.id = pv.pregunta_id
+                            GROUP BY 
+                                pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
+                                us.nombre, fp.ruta_archivo, pd.usuario_id
+                            ORDER BY votos DESC, pr.datetime DESC
+                            LIMIT 20");
+
+    $query->execute(['usuario_id' => $_SESSION['usuario']['id']]);
+    return $query->fetchAll(PDO::FETCH_OBJ);
+}
 }

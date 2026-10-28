@@ -84,11 +84,16 @@ class UsuarioController extends BaseController {
     }
     
     public function show() {
+        $preguntas = PreguntaModel::getTop20();
         $usuarios = UsuarioModel::getAll();
         $this->render('menuadmin.view.php', [
-            "usuarios" => $usuarios
+            "usuarios" => $usuarios,
+            "preguntas" => $preguntas
             ]);
         
+        
+
+
     }
     
     public function store() {
@@ -222,6 +227,25 @@ class UsuarioController extends BaseController {
         $this->redirect("index.php?controller=UsuarioController&accion=show");
 
     }
+
+        public function filter(){
+        $texto = trim($_POST["buscar"] ?? "");
+
+        if($texto === ""){
+            $this->redirect("index.php?controller=UsuarioController&accion=show");
+        }
+
+        $usuario = UsuarioModel::getUserByEmail($texto);
+
+        $this->render('menuadmin.view.php', [
+            "usuarios" => $usuario ? [(array) $usuario] : []
+            ]);
+    }
+
+
+
+
+
 
 
 
