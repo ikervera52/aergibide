@@ -11,7 +11,8 @@ class RespuestaController extends BaseController {
 
         $this->render('respuestas.view.php', [
             'pregunta' => PreguntaModel::getById($_GET['id'] ?? 0),
-            'respuestas' => RespuestaModel::getByPreguntaId($_GET['id'] ?? 0)
+            'respuestas' => RespuestaModel::getByPreguntaId($_GET['id'] ?? 0),
+            'tipoUsuario' => $_SESSION["usuario"]["tipo"]
         ]);
 
     }
@@ -142,6 +143,31 @@ class RespuestaController extends BaseController {
     
     public function destroy() {
         
+        $respuesta_id = $_GET["id"] ?? 0;
+
+        if(RespuestaModel::deleteById($respuesta_id)){
+            $this->json(['success' => true, 'mensage' => 'Respuesta eliminada con exito.']); 
+        } else{
+            $this->json(['success' => false, 'mensage' => 'Error al eliminar la respuesta.']);
+        }
+    }
+
+    public function markSeleccionada(){
+
+        $respuesta_id = $_GET["id"] ?? 0;
+        $pregunta_id = $_GET["pregunta_id"] ?? 0;
+
+        if(RespuestaModel::selectedById($respuesta_id)){
+
+            if(PreguntaModel::closeById($pregunta_id)){
+                $this->json(['success' => true, 'mensage' => 'Respuesta seleccionada con exito.']); 
+            }else{
+                $this->json(['success' => false, 'mensage' => 'Error al seleccionar la respuesta.']);
+            }
+
+        } else{
+            $this->json(['success' => false, 'mensage' => 'Error al seleccionar la respuesta.']);
+        }
     }
     
     public function destroyAll() {

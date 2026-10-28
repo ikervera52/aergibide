@@ -153,7 +153,7 @@ class PreguntaModel {
     public static function deleteById($id) {
         $db = Database::getConnection();
         $stmt = $db->prepare("DELETE FROM preguntas WHERE id = :id");
-        $stmt->execute(['id' => $id]);
+        return $stmt->execute(['id' => $id]);
     }
 
     public static function saveMismaPregunta($datos){
@@ -178,6 +178,12 @@ class PreguntaModel {
         $db = Database::getConnection();
         $stmt = $db->prepare("UPDATE preguntas SET misma_pregunta = misma_pregunta - 1 WHERE id = :pregunta_id");
         $stmt->execute($datos);
+    }
+
+    public static function closeById($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("UPDATE preguntas SET estado = 'cerrado' WHERE id = :id");
+        return $stmt->execute(["id" => $datos]);
     }
 
     public static function deleteAll() {

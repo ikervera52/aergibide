@@ -79,7 +79,8 @@ class UsuarioController extends BaseController {
             'seccion'    => $seccion,
             'preguntas'  => $preguntas,
             'destacadas' => $destacadas,
-            'archivos'   => $archivos
+            'archivos'   => $archivos,
+            'tipoUsuario'=> $_SESSION["usuario"]["tipo"]
         ]);
     }
     

@@ -7,7 +7,17 @@
         </a>
         <div class="pregunta-meta">
             <small><?=$pregunta->datetime?></small>
-            <i class="bi bi-three-dots"></i>
+            <?php if($tipoUsuario == "admin") : ?>
+                <div class="acciones-admin-pregunta">
+                    <i class="bi bi-three-dots btn-menu-admin" onclick="toggleMenuAdmin(this)"></i>
+                    
+                    <div class="menu-desplegable-admin oculto">
+                        <button class="opcion-eliminar" onclick="eliminarPregunta(this, <?=$pregunta->id ?? 0; ?>)">
+                            <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -30,3 +40,6 @@
 </article>
 
 <script src="scripts/misma_pregunta.js"></script>
+<script src="scripts/toogle_menu_admin.js"></script>
+<script src="scripts/eliminar_pregunta_admin.js"></script>
+
