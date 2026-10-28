@@ -72,7 +72,8 @@ class UsuarioController extends BaseController {
             'esMio'      => $esMio,
             'preguntas'  => PreguntaModel::getByUsuarioId($id),
             'destacadas' => $destacadas,
-            'archivos'   => $archivos
+            'archivos'   => $archivos,
+            'tipoUsuario'=> $_SESSION["usuario"]["tipo"]
         ]);
     }
     

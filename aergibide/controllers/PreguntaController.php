@@ -9,14 +9,14 @@ class PreguntaController extends BaseController {
          $this->requireLogin();
 
         $preguntas = PreguntaModel::getAll();
-        $this->render("../views/index.view.php", ["preguntas" => $preguntas]);
+        $this->render("../views/index.view.php", ["preguntas" => $preguntas, "tipoUsuario" => $_SESSION["usuario"]["tipo"]]);
         
     }
     public function filter(){
          $this->requireLogin();
         $texto = trim($_POST["buscar"] ?? "");
         $preguntasFiltradas = PreguntaModel::getByContenido(['titulo' => "%$texto%", 'contenido' => "%$texto%"]);
-        $this->render("../views/index.view.php", ["preguntas" => $preguntasFiltradas]);
+        $this->render("../views/index.view.php", ["preguntas" => $preguntasFiltradas, "tipoUsuario" => $_SESSION["usuario"]["tipo"]]);
     }
 
     public function create(){
@@ -107,6 +107,13 @@ class PreguntaController extends BaseController {
     
     public function destroy() {
         
+        $pregunta_id = $_GET["id"] ?? 0;
+
+        if(PreguntaModel::deleteById($pregunta_id)){
+            $this->json(['success' => true, 'mensage' => 'Pregunta eliminada con exito.']); 
+        } else{
+            $this->json(['success' => false, 'mensage' => 'Error al eliminar la pregunta.']);
+        }
     }
     
     public function destroyAll() {

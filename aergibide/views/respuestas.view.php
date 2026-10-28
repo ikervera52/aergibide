@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/viewsStyles/respuestas.view.css">
     <!-- Biblioteca de Iconos-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     
@@ -30,7 +31,6 @@
                 </a>
                 <div class="pregunta-meta">
                     <small><?=$pregunta->datetime?></small>
-                    <i class="bi bi-three-dots"></i>
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                 <?php if(isset($pregunta->ruta_archivo_adjunto)) : ?>
                     <img class="pregunta-imagen" src="<?=$pregunta->ruta_archivo_adjunto?>" alt="Imagen adjunta a la pregunta">
                 <?php endif; ?>
-                <p><?=$pregunta->contenido?></p>
+                <p class="contenido"><?=$pregunta->contenido?></p>
             </div>
             
             <div class="pregunta-footer">
@@ -57,9 +57,6 @@
 
         <?php if(!empty($respuestas)) : ?>
             <?php foreach($respuestas as $respuesta) : ?>
-
-                
-
                 <div class="pregunta <?=$respuesta->seleccionada == 1 ? "respuesta-seleccionada" : ""?>">
 
                     <?php if($respuesta->seleccionada == 1) : ?>
@@ -77,7 +74,21 @@
 
                         <div class="pregunta-meta">
                             <small><?=$respuesta->datetime?></small>
-                            <i class="bi bi-three-dots"></i>
+                            <?php if($tipoUsuario == "admin") : ?>
+                                <div class="acciones-admin-pregunta">
+                                    <i class="bi bi-three-dots btn-menu-admin" onclick="toggleMenuAdmin(this)"></i>
+                                    
+                                    <div class="menu-desplegable-admin oculto">
+                                        <button class="opcion-eliminar" onclick="eliminarRespuesta(this, <?=$respuesta->id ?? 0; ?>)">
+                                            <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
+                                        </button>
+                                        
+                                        <button class="opcion-seleccionar" onclick="seleccionarRespuesta(this, <?=$respuesta->id ?? 0; ?>, <?=$pregunta->id?>)">
+                                            <i style="color: var(--color-verde)"class="bi bi-check2-circle"></i> Correcta
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -85,7 +96,7 @@
                         <?php if(isset($respuesta->ruta_archivo_adjunto)) : ?>
                             <img class="pregunta-imagen" src="<?=$respuesta->ruta_archivo_adjunto?>" alt="Imagen adjunta a la pregunta">
                         <?php endif; ?>
-                        <p><?=$respuesta->contenido?></p>
+                        <p class="contenido"><?=$respuesta->contenido?></p>
                     </div>
 
                     <div class="pregunta-footer">
@@ -125,6 +136,9 @@
     <?php require "layout/footer.php"; ?>
 
     <script src="scripts/misma_pregunta.js"></script>
+    <script src="scripts/toogle_menu_admin.js"></script>
+    <script src="scripts/eliminar_respuesta_admin.js"></script>
+    <script src="scripts/seleccionar_respuesta_admin.js"></script>
     <script src="scripts/voto.js"></script>
     <script>
         document.getElementById('btn-responder').addEventListener('click', function() {

@@ -35,7 +35,7 @@ class RespuestaModel {
     public static function deleteById($id) {
         $db = Database::getConnection();
         $stmt = $db->prepare("DELETE FROM respuestas WHERE id = :id");
-        $stmt->execute(['id' => $id]);
+        return $stmt->execute(['id' => $id]);
     }
 
     public static function saveVoto($datos){
@@ -60,6 +60,12 @@ class RespuestaModel {
         $db = Database::getConnection();
         $stmt = $db->prepare("UPDATE respuestas SET puntuacion = puntuacion - 1 WHERE id = :respuesta_id");
         $stmt->execute($datos);
+    }
+
+    public static function selectedById($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("UPDATE respuestas SET seleccionada =  1 WHERE id = :respuesta_id");
+        return $stmt->execute(["respuesta_id" => $datos]);
     }
     
     public static function deleteAll() {

@@ -9,7 +9,7 @@
 .formulario-respuesta{
     padding: 1rem 0;
     border-top: 0.3px solid var(--color-negro);
-    width: 60%;
+    width: 100%;
 }
 
 .formulario-respuesta form, #contenido{
@@ -71,4 +71,8 @@ main div:nth-child(2){
 
 .mensaje-respuesta-seleccionada>*{
     color: var(--color-blanco);
+}
+
+.contenido{
+    white-space: pre-wrap;
 }

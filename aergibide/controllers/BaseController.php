@@ -19,8 +19,7 @@ class BaseController {
         exit;
     }
 
-
-    protected function requireLogin() {
+    public function requireLogin() {
         if (!isset($_SESSION['usuario'])) {
             $this->redirect('index.php?controller=UsuarioController');
         }
