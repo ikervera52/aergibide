@@ -1,6 +1,14 @@
 <header>
+    <?php
+    $tieneNotifi = false;
+    require_once __DIR__ . '/../../models/NotificacionModel.php';
+    $tieneNotifi = count(NotificacionModel::getByUsuarioId($_SESSION['usuario']['id'])) > 0;
+    
+    ?>
     <div>
-        <i class="bi bi-bell"></i>
+        <a href="#" id="btnNotificaciones">
+            <i class="bi <?= $tieneNotifi ? 'bi-bell-fill' : 'bi-bell' ?>"></i>
+        </a>
     </div>
 
 <a href="index.php">
@@ -35,3 +43,8 @@
     </div>
 
 </header>
+
+<div id="capaNotificaciones" hidden></div>
+<aside id="panelNotificaciones" hidden></aside>
+
+<script src="scripts/notificaciones.js"></script>

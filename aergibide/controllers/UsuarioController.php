@@ -9,7 +9,6 @@ class UsuarioController extends BaseController {
     public function index() {
 
         if (isset($_SESSION['usuario'])) {
-            // Ya hay sesión: no enseño el login, voy a las preguntas
             $this->redirect('index.php?controller=PreguntaController');
         }
 
@@ -44,14 +43,11 @@ class UsuarioController extends BaseController {
         $this->requireLogin();
 
         $miId = (int)$_SESSION['usuario']['id'];
-
-        // Si viene ?id=... veo ese perfil; si no, el mío
         $id = (int)($_GET['id'] ?? $miId);
         $esMio = ($id === $miId);
 
         $usuario = UsuarioModel::getUserById($id);
 
-        // El usuario no existe
         if (!$usuario) {
             if ($esMio) {
                 $this->redirect('index.php?controller=UsuarioController&accion=logout');
@@ -59,18 +55,29 @@ class UsuarioController extends BaseController {
             $this->redirect('index.php?controller=PreguntaController');
         }
 
-        // Lo privado solo se consulta si es mi perfil
+        $seccion = $_GET['seccion'] ?? 'preguntas';
+
+        if ($esMio == false || ($seccion != 'destacadas' && $seccion != 'archivos')) {
+            $seccion = 'preguntas';
+        }
+
+        $preguntas = [];
         $destacadas = [];
         $archivos = [];
-        if ($esMio) {
+
+        if ($seccion === 'preguntas') {
+            $preguntas = PreguntaModel::getByUsuarioId($id);
+        } elseif ($seccion === 'destacadas') {
             $destacadas = PreguntaModel::getDestacadasByUsuarioId($id);
+        } else {
             $archivos = ArchivoModel::getByUsuarioId($id);
         }
 
         $this->render('perfil.view.php', [
             'usuario'    => $usuario,
             'esMio'      => $esMio,
-            'preguntas'  => PreguntaModel::getByUsuarioId($id),
+            'seccion'    => $seccion,
+            'preguntas'  => $preguntas,
             'destacadas' => $destacadas,
             'archivos'   => $archivos
         ]);
@@ -136,7 +143,6 @@ class UsuarioController extends BaseController {
             $this->json(['ok' => false, 'error' => 'Ese email ya está registrado.']);
         }
 
-        // Foto (opcional): solo si el usuario ha elegido una
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE) {
             $actual = UsuarioModel::getUserById($id);
             $error = $this->guardarFoto($id, $actual);
@@ -157,7 +163,6 @@ class UsuarioController extends BaseController {
         ]);
     }
 
-    // Devuelve el texto del error, o null si todo ha ido bien
     private function guardarFoto($usuarioId, $actual) {
         $foto = $_FILES['foto'];
 
@@ -183,7 +188,6 @@ class UsuarioController extends BaseController {
             return "Error al intentar mover el archivo a la carpeta.";
         }
 
-        // Registro la foto nueva y se la asigno al usuario
         $fotoId = UsuarioModel::createFoto([
             'nombre' => $nuevoNombre,
             'ruta_archivo' => './uploads/' . $nuevoNombre,
@@ -192,7 +196,7 @@ class UsuarioController extends BaseController {
         ]);
         UsuarioModel::setFoto($usuarioId, $fotoId);
 
-        // Borro la foto anterior (la id 1 es la de por defecto: no se toca)
+        // Borrar la foto anterior
         if ($actual->foto_perfil_id && $actual->foto_perfil_id != 1) {
             $viejo = realpath(__DIR__ . '/../' . ltrim($actual->ruta_archivo, './'));
             $carpeta = realpath(__DIR__ . '/../uploads');

@@ -1,4 +1,4 @@
- async function guardarMismaPregunta(preguntaId, btnMismaPregunta) {
+async function guardarMismaPregunta(preguntaId, btnMismaPregunta) {
     try{
 
         if(btnMismaPregunta.classList.contains("seleccionada")){
@@ -13,6 +13,7 @@
             
         if(response.ok){
                 btnMismaPregunta.classList.remove("seleccionada");  
+                recargarPerfil();
             }else{
                 alert("Problemas con el servidor. Intentalo más tarde.");
             }
@@ -28,6 +29,7 @@
 
         if(response.ok){
             btnMismaPregunta.classList.add("seleccionada");  
+            recargarPerfil();
         }else{
             alert("Problemas con el servidor. Intentalo más tarde.");
         }
@@ -36,5 +38,11 @@
     catch(error){
         console.error("Error al guardar la misma pregunta:", error);
         alert("Ocurrió un error. Intentalo más tarde.");
+    }
+}
+
+function recargarPerfil() {
+    if (document.querySelector("#destacadas")) {
+        location.reload();
     }
 }

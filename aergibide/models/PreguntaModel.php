@@ -122,7 +122,7 @@ class PreguntaModel {
     public static function getDestacadasByUsuarioId($id) {
         $db = Database::getConnection();
         $query = $db->prepare("SELECT 
-                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
+                                pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
                                 us.nombre,
                                 fp.ruta_archivo,
                                 COUNT(re.id) AS respuestas_count,
@@ -136,7 +136,7 @@ class PreguntaModel {
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
                             WHERE pd.usuario_id = :id
-                            GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
+                            GROUP BY pr.id,  pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
                             ORDER BY pr.datetime DESC");
         $query->execute(['id' => $id]);
         return $query->fetchAll();

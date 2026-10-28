@@ -84,7 +84,6 @@ class UsuarioModel {
         $db = Database::getConnection();
         
         if ($datos["password"] === "") {
-        // Sin contraseña nueva: se mantiene la actual
         $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo WHERE id = :id";
         $params = [
             ":nombre" => $datos["nombre"],

@@ -154,3 +154,54 @@ header{
 i.bi{
     font-size: 22px;
 }
+
+/* NOTIFICACIONES */
+#capaNotificaciones {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 800;
+}
+
+#panelNotificaciones {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    width: 40%;
+    min-width: 300px;
+    height: calc(100% - 55px);
+    overflow-y: auto;
+    background-color: var(--color-blanco);
+    z-index: 900;
+}
+
+#capaNotificaciones[hidden],
+#panelNotificaciones[hidden] {
+    display: none;
+}
+
+.notificacion {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.notificacion > a:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+}
+
+.eliminar-notificacion {
+    color: var(--color-principal);
+    text-decoration: underline;
+}
+
+.sinNotificaciones {
+    padding: 1.5rem 1rem;
+}
