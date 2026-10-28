@@ -1,6 +1,6 @@
 <header>
     <div>
-        <i class="bi bi-bell"></i>
+        <a href="#" id="btnNotificaciones"><i class="bi bi-bell"></i></a>
     </div>
 
 <a href="index.php">
@@ -35,3 +35,8 @@
     </div>
 
 </header>
+
+<div id="capaNotificaciones" hidden></div>
+<aside id="panelNotificaciones" hidden></aside>
+
+<script src="scripts/notificaciones.js"></script>
