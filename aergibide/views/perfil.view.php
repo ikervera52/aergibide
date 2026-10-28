@@ -13,6 +13,13 @@
 
 <?php require __DIR__ . '/layout/header.php'; ?>
 
+<?php
+$urlPerfil = 'index.php?controller=UsuarioController&accion=perfil';
+if (!$esMio) {
+    $urlPerfil .= '&id=' . (int)$usuario->id;
+}
+?>
+
 <main>
 
     <!-- Cabecera del perfil -->
@@ -58,32 +65,33 @@
     </form>
     <?php endif; ?>
 
-    <!-- Pestañas -->
     <nav class="pestanas">
+        <a id="btnPreguntas" class="pestana <?= $seccion === 'preguntas' ? 'activa' : '' ?>"
+           href="<?= $urlPerfil ?>&seccion=preguntas">Preguntas</a>
+
         <?php if ($esMio): ?>
-            <button type="button" id="btnPreguntas" class="pestana activa" onclick="mostrarPreguntas()">Preguntas</button>
-            <button type="button" id="btnDestacadas" class="pestana" onclick="mostrarDestacadas()">Destacadas</button>
-            <button type="button" id="btnArchivos" class="pestana" onclick="mostrarArchivos()">Archivos adjuntos</button>
-        <?php else: ?>
-            <!-- Perfil ajeno: solo la pestaña de preguntas -->
-            <button type="button" id="btnPreguntas" class="pestana activa">Preguntas</button>
+            <a id="btnDestacadas" class="pestana <?= $seccion === 'destacadas' ? 'activa' : '' ?>"
+               href="<?= $urlPerfil ?>&seccion=destacadas">Destacadas</a>
+
+            <a id="btnArchivos" class="pestana <?= $seccion === 'archivos' ? 'activa' : '' ?>"
+               href="<?= $urlPerfil ?>&seccion=archivos">Archivos adjuntos</a>
         <?php endif; ?>
     </nav>
 
-    <!-- 1. Preguntas del usuario (se ve siempre) -->
-    <section id="preguntas" class="seccion">
-        <?php foreach ($preguntas as $pregunta): ?>
-            <?php require __DIR__ . '/components/pregunta.php'; ?>
-        <?php endforeach; ?>
-        <?php if (empty($preguntas)): ?>
-            <p><?= $esMio ? 'Aún no has hecho preguntas.' : 'Este usuario aún no ha hecho preguntas.' ?></p>
-        <?php endif; ?>
-    </section>
+    <?php if ($seccion === 'preguntas'): ?>
 
-    <?php if ($esMio): ?>
+        <section id="preguntas" class="seccion">
+            <?php foreach ($preguntas as $pregunta): ?>
+                <?php require __DIR__ . '/components/pregunta.php'; ?>
+            <?php endforeach; ?>
+            <?php if (empty($preguntas)): ?>
+                <p><?= $esMio ? 'Aún no has hecho preguntas.' : 'Este usuario aún no ha hecho preguntas.' ?></p>
+            <?php endif; ?>
+        </section>
 
-        <!-- 2. Preguntas destacadas (solo en mi perfil) -->
-        <section id="destacadas" class="seccion" hidden>
+    <?php elseif ($seccion === 'destacadas'): ?>
+
+        <section id="destacadas" class="seccion">
             <?php foreach ($destacadas as $pregunta): ?>
                 <?php require __DIR__ . '/components/pregunta.php'; ?>
             <?php endforeach; ?>
@@ -92,8 +100,9 @@
             <?php endif; ?>
         </section>
 
-        <!-- 3. Archivos adjuntos (solo en mi perfil) -->
-        <section id="archivos" class="seccion" hidden>
+    <?php else: ?>
+
+        <section id="archivos" class="seccion">
             <?php foreach ($archivos as $archivo): ?>
                 <div class="archivo">
                     <a href="<?= htmlspecialchars($archivo->ruta_archivo) ?>" target="_blank">
@@ -114,60 +123,21 @@
 
 <?php if ($esMio): ?>
 <script>
-const btnPreguntas = document.querySelector('#btnPreguntas');
-const btnDestacadas = document.querySelector('#btnDestacadas');
-const btnArchivos = document.querySelector('#btnArchivos');
 const formEditar = document.querySelector('#formEditar');
 const inputFoto = document.querySelector('#inputFoto');
 const inputNombre = document.querySelector('#inputNombre');
 const inputEmail = document.querySelector('#inputEmail');
 const mensajeEditar = document.querySelector('#mensajeEditar');
 
-const seccionPreguntas = document.querySelector('#preguntas');
-const seccionDestacadas = document.querySelector('#destacadas');
-const seccionArchivos = document.querySelector('#archivos');
 const perfilFoto = document.querySelector('#perfilFoto');
 const perfilNombre = document.querySelector('#perfilNombre');
 const perfilEmail = document.querySelector('#perfilEmail');
 
-
-function mostrarPreguntas() {
-    seccionPreguntas.hidden = false;
-    seccionDestacadas.hidden = true;
-    seccionArchivos.hidden = true;
-
-    btnPreguntas.classList.add('activa');
-    btnDestacadas.classList.remove('activa');
-    btnArchivos.classList.remove('activa');
-}
-
-function mostrarDestacadas() {
-    seccionPreguntas.hidden = true;
-    seccionDestacadas.hidden = false;
-    seccionArchivos.hidden = true;
-
-    btnPreguntas.classList.remove('activa');
-    btnDestacadas.classList.add('activa');
-    btnArchivos.classList.remove('activa');
-}
-
-function mostrarArchivos() {
-    seccionPreguntas.hidden = true;
-    seccionDestacadas.hidden = true;
-    seccionArchivos.hidden = false;
-
-    btnPreguntas.classList.remove('activa');
-    btnDestacadas.classList.remove('activa');
-    btnArchivos.classList.add('activa');
-}
-
-// Abrir el formulario
 function abrirFormulario(evento) {
     evento.preventDefault();
     formEditar.hidden = false;
 }
 
-// Cancelar: pongo en los campos lo que se ve ahora en pantalla y cierro
 function cancelarEdicion() {
     inputNombre.value = perfilNombre.textContent;
     inputEmail.value = perfilEmail.textContent;
@@ -176,12 +146,10 @@ function cancelarEdicion() {
     formEditar.hidden = true;
 }
 
-// Guardar
 async function guardarPerfil(evento) {
     evento.preventDefault();
     mensajeEditar.textContent = '';
 
-    // Envío los campos del formulario (nombre, email y foto)
     const datos = new FormData(formEditar);
 
     const respuesta = await fetch('index.php?controller=UsuarioController&accion=actualizar', {
@@ -192,7 +160,6 @@ async function guardarPerfil(evento) {
     const resultado = await respuesta.json();
 
     if (resultado.ok == true) {
-        // Actualizo la pantalla sin recargar
         perfilNombre.textContent = resultado.nombre;
         perfilEmail.textContent = resultado.email;
         perfilFoto.src = resultado.ruta_archivo;
@@ -212,7 +179,6 @@ async function guardarPerfil(evento) {
     }
 }
 
-// Conecto cada función con su elemento
 document.querySelector('#editar').addEventListener('click', abrirFormulario);
 document.querySelector('#btnCancelar').addEventListener('click', cancelarEdicion);
 formEditar.addEventListener('submit', guardarPerfil);

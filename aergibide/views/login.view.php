@@ -52,6 +52,11 @@ const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]{8,}$/;
 
 boton.addEventListener('click', hacerLogin);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    hacerLogin();
+  }
+});
 
 function datosValidos(email, password) {
     return regexEmail.test(email) && regexPassword.test(password);
