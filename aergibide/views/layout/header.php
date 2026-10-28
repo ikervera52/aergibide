@@ -1,6 +1,14 @@
 <header>
+    <?php
+    $tieneNotifi = false;
+    require_once __DIR__ . '/../../models/NotificacionModel.php';
+    $tieneNotifi = count(NotificacionModel::getByUsuarioId($_SESSION['usuario']['id'])) > 0;
+    
+    ?>
     <div>
-        <a href="#" id="btnNotificaciones"><i class="bi bi-bell"></i></a>
+        <a href="#" id="btnNotificaciones">
+            <i class="bi <?= $tieneNotifi ? 'bi-bell-fill' : 'bi-bell' ?>"></i>
+        </a>
     </div>
 
 <a href="index.php">

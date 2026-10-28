@@ -28,4 +28,10 @@ class NotificacionController extends BaseController {
 
         $this->json(['ok' => $ok]);
     }
+
+    public function estado() {
+        $this->requireLogin();
+        $hay = count(NotificacionModel::getByUsuarioId($_SESSION['usuario']['id'])) > 0;
+        $this->json(['hay' => $hay]);
+    }
 }
