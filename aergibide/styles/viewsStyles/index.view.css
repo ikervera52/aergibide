@@ -7,8 +7,12 @@
     color: var(--color-blanco);
 }
 
+.hacerPregunta:hover{
+    background-color: var(--color-principal);
+}
+
 .hacerPregunta i{
-    color: var(--color-blanco);
+    color: var(--color-n);
 }
 
 .buscador{
@@ -80,6 +84,11 @@
     cursor: pointer;
 
 }
+.filtros:hover{
+    background-color: var(--color-principal);
+}
+
+
 
 #btnLimpiar{
     background-color: var(--color-blanco);

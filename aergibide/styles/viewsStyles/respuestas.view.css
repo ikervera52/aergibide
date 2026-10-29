@@ -76,3 +76,11 @@ main div:nth-child(2){
 .contenido{
     white-space: pre-wrap;
 }
+
+input[value="Enviar"]:hover {
+    background: var(--color-principal) !important;
+}
+
+.btn-responder{
+    background-color: white !important;
+}

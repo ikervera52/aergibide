@@ -104,4 +104,12 @@ class UsuarioModel {
 
         $db->prepare($sql)->execute($params);
     }
+
+
+    public static function getUserByName($texto){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT * FROM usuarios WHERE nombre LIKE :texto");
+        $stmt->execute([":texto" => "%" . $texto . "%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

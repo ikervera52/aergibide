@@ -60,6 +60,13 @@
     color: var(--color-blanco);
 }
 
+#logOut:hover, #btnGuardar:hover {
+    background-color: var(--color-principal);
+}
+#editar:hover, #btnCancelar:hover {
+    border-color: #000000;
+}
+
 .pestanas {
     display: flex;
     gap: 2rem;

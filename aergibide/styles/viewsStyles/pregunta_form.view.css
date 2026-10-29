@@ -11,6 +11,10 @@ form{
     gap: 1rem;
 }
 
+.acciones > input:hover, .acciones > a:hover{
+    background-color: var(--color-principal);
+}
+
 .archivos {
     display: flex;
     align-items: center;

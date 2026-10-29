@@ -60,10 +60,6 @@
     color: var(--color-blanco);
 }
 
-.pregunta-footer button:hover{
-    cursor:pointer;
-}
-
 .seleccionada{
     background-color: var(--color-principal) !important;
 }
@@ -131,4 +127,9 @@
 
 .menu-desplegable-admin .opcion-eliminar:hover {
     background-color: #f7e8e9;
+}
+
+.btn-menu-admin:hover {
+    transform: scale(1.15);
+    color: var(--color-principal);
 }

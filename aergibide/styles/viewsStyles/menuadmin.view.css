@@ -80,3 +80,20 @@
     cursor: pointer;
 }
 
+.seccion td form button[style*="naranja"]:hover {
+    background: #d68e1b !important;
+}
+
+.seccion td form button[style*="rojo"]:hover {
+    background: #b64242 !important;
+}
+
+.seccion td form button {
+    padding: .25rem .8rem;
+    border-radius: 5px;
+    font-size: .75rem;
+    cursor: pointer;
+    border: none;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
