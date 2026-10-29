@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/UsuarioModel.php';
 require_once __DIR__ . '/../models/PreguntaModel.php';
 require_once __DIR__ . '/../models/ArchivoModel.php';
 require_once __DIR__ . '/../models/RespuestaModel.php';
+require_once __DIR__ . '/../models/NotificacionModel.php';
 
 class RespuestaController extends BaseController {
     
@@ -78,6 +79,8 @@ class RespuestaController extends BaseController {
         ];
 
         $respuesta_id = RespuestaModel::create($datos);
+
+        NotificacionModel::crearNotificacion($pregunta_id, $_SESSION["usuario"]["id"], $respuesta_id);
 
         if (isset($_FILES['archivo']) && $_FILES['archivo']['error'] === UPLOAD_ERR_OK){
             $this->guardarArchivo($respuesta_id);
