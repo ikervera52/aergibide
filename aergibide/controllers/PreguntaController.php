@@ -2,6 +2,7 @@
 require_once __DIR__ . '/BaseController.php';
 require_once __DIR__ . '/../models/PreguntaModel.php';
 require_once __DIR__ . '/../models/ArchivoModel.php';
+require_once __DIR__ . '/../models/CategoriaPreguntaModel.php';
 
 class PreguntaController extends BaseController {
     
@@ -9,32 +10,39 @@ class PreguntaController extends BaseController {
          $this->requireLogin();
 
         $preguntas = PreguntaModel::getAll();
-        $this->render("../views/index.view.php", ["preguntas" => $preguntas, "tipoUsuario" => $_SESSION["usuario"]["tipo"]]);
+        $categorias = CategoriaPreguntaModel::getAll();
+        $this->render("../views/index.view.php", ["preguntas" => $preguntas,"categorias" => $categorias, "tipoUsuario" => $_SESSION["usuario"]["tipo"]]);
         
     }
     public function filter(){
          $this->requireLogin();
         $texto = trim($_POST["buscar"] ?? "");
-        $preguntasFiltradas = PreguntaModel::getByContenido(['titulo' => "%$texto%", 'contenido' => "%$texto%"]);
-        $this->render("../views/index.view.php", ["preguntas" => $preguntasFiltradas, "tipoUsuario" => $_SESSION["usuario"]["tipo"]]);
+        $categoria_id = $_POST["categoria"] ?? null;
+        $fecha = $_POST["fecha"] ?? null;
+
+        $preguntasFiltradas = PreguntaModel::getByFiltros($texto, $categoria_id, $fecha);
+        $this->render("../views/index.view.php", ["preguntas" => $preguntasFiltradas,"categorias" => CategoriaPreguntaModel::getAll(), "tipoUsuario" => $_SESSION["usuario"]["tipo"]]);
     }
 
     public function create(){
-        $this->render("../views/pregunta_form.view.php");
+        $categorias = CategoriaPreguntaModel::getAll();
+        $this->render("../views/pregunta_form.view.php", ["categorias" => $categorias]);
     }
 
     public function store(){
         $titulo = $_POST["titulo"];
         $contenido = $_POST["contenido"];
+        $categoria_pregunta_id = $_POST["categoria"] ?? null;
 
-        if($titulo === "" || $contenido === ""){
-            $this->mostrarError("El titulo y la pregunta son obligatorias.");
+        if($titulo === "" || $contenido === "" || $categoria_pregunta_id == ""){
+            $this->mostrarError("El titulo, la pregunta y la categoría son obligatorias.");
         }
 
         $datos = [
             "usuario_id" => $_SESSION["usuario"]["id"],
             "titulo" => $titulo,
-            "contenido" => $contenido
+            "contenido" => $contenido,
+            "categoria_pregunta_id" => $categoria_pregunta_id
         ];
 
         $pregunta_id = PreguntaModel::create($datos);
@@ -96,7 +104,8 @@ class PreguntaController extends BaseController {
         }
         $this->render("../views/pregunta_form.view.php", [
                     "error" => $error,
-                    "old" => $_POST
+                    "old" => $_POST,
+                    "categorias" => CategoriaPreguntaModel::getAll()
                 ]);
         die();
     }

@@ -67,34 +67,64 @@ class PreguntaModel {
         return $query->fetch(PDO::FETCH_OBJ);
     }
 
-    public static function getByContenido($texto) {
-        $db = Database::getConnection();
+public static function getByFiltros($texto, $categoria_id, $fecha) {
+    $db = Database::getConnection();
 
-        $query = $db->prepare("SELECT 
-                                    pr.id,
-                                    pr.usuario_id,
-                                    pr.titulo, 
-                                    pr.contenido, 
-                                    pr.estado,
-                                    pr.datetime, 
-                                    us.nombre,
-                                    fp.ruta_archivo,
-                                    COUNT(DISTINCT re.id) AS respuestas_count,
-                                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
-                                FROM preguntas pr 
-                                INNER JOIN usuarios us ON pr.usuario_id = us.id
-                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
-                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
-                                LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
-                                WHERE pr.contenido LIKE :contenido OR pr.titulo LIKE :titulo
-                                GROUP BY 
-                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
-                                    us.nombre, fp.ruta_archivo, pd.usuario_id
-                                ORDER BY pr.datetime DESC");
+    $datos = [
+        'usuario_id' => $_SESSION['usuario']['id'],
+        'titulo'     => "%$texto%", 
+        'contenido'  => "%$texto%", 
+    ];
 
-        $query->execute($texto + ['usuario_id' => $_SESSION['usuario']['id']]);
-        return $query->fetchAll(PDO::FETCH_OBJ);
+    $sql = "SELECT pr.id,
+                   pr.usuario_id,
+                   pr.titulo, 
+                   pr.contenido, 
+                   pr.estado,
+                   pr.datetime, 
+                   us.nombre,
+                   fp.ruta_archivo,
+                   COUNT(DISTINCT re.id) AS respuestas_count,
+                   CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
+            FROM preguntas pr 
+            INNER JOIN usuarios us ON pr.usuario_id = us.id
+            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+            LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+            WHERE (pr.contenido LIKE :contenido OR pr.titulo LIKE :titulo)";
+
+    // Filtro por Categoría
+    if (!empty($categoria_id)) {
+        $sql .= " AND pr.categoria_pregunta_id = :categoria_id";
+        $datos["categoria_id"] = $categoria_id;
     }
+
+    // Filtro por Fecha
+    if (!empty($fecha)) {
+        switch ($fecha) {
+            case 'semana':
+                $sql .= " AND pr.datetime >= NOW() - INTERVAL 7 DAY";
+                break;
+            case 'mes':
+                $sql .= " AND pr.datetime >= NOW() - INTERVAL 1 MONTH";
+                break;
+            case 'seis_meses':
+                $sql .= " AND pr.datetime >= NOW() - INTERVAL 6 MONTH";
+                break;
+        }
+    }
+
+    // Agrupación y ordenación
+    $sql .= " GROUP BY 
+                pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.estado, pr.datetime, 
+                us.nombre, fp.ruta_archivo, pd.usuario_id
+              ORDER BY pr.datetime DESC";
+
+    $query = $db->prepare($sql);
+    $query->execute($datos);
+
+    return $query->fetchAll(PDO::FETCH_OBJ);
+}
 
     public static function getByUsuarioId($id) {
         $db = Database::getConnection();
@@ -144,7 +174,7 @@ class PreguntaModel {
     
     public static function create($datos) {
         $db = Database::getConnection();
-        $stmt = $db->prepare("INSERT INTO preguntas (usuario_id, titulo, contenido) VALUES (:usuario_id, :titulo, :contenido)");
+        $stmt = $db->prepare("INSERT INTO preguntas (usuario_id, titulo, contenido, categoria_pregunta_id) VALUES (:usuario_id, :titulo, :contenido, :categoria_pregunta_id)");
         $stmt->execute($datos);
         return $db->lastInsertId(); 
     }

@@ -53,18 +53,45 @@
     padding-bottom: 1rem;
 }
 
+.buscadorConFiltro{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .filtros{
     padding: .5rem .65rem;
     border-radius: 100px;
+    cursor: pointer;
 }
 
 .filtros i{
     color: var(--color-blanco);
 }
 
+.contenedorFiltrosHijo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: .5rem 3rem;
+    border-radius: 10px;
+}
+
+.contenedorFiltrosHijo select, .contenedorFiltrosHijo button{
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
 .filtros:hover{
     background-color: var(--color-principal);
 }
 
 
 
+#btnLimpiar{
+    background-color: var(--color-blanco);
+    color: var(--color-negro);
+    border: .3px solid var(--color-negro);
+}

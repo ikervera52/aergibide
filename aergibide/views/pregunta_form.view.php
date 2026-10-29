@@ -27,6 +27,15 @@
             <label for="contenido">Pregunta</label>
             <textarea name="contenido" id="contenido" placeholder="¿Cual es tu duda?"><?= isset($old['contenido']) ? $old['contenido'] : '' ?></textarea>
 
+            
+            <label for="categoria">Categoría</label>
+            <select name="categoria" id="categoria">
+                    <option value="" disabled selected>Elige la categoría</option>
+                <?php foreach($categorias as $categoria) : ?>
+                    <option value="<?=$categoria->id?>"><?=$categoria->nombre?></option>
+                <?php endforeach; ?>
+            </select>
+            
             <label for="archivo">Archivos</label>
 
             <label for="archivo" class="archivos" id="archivos">
