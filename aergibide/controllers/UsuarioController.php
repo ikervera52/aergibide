@@ -229,24 +229,17 @@ class UsuarioController extends BaseController {
 
     }
 
-        public function filter(){
+    public function filter(){
         $texto = trim($_POST["buscar"] ?? "");
 
         if($texto === ""){
             $this->redirect("index.php?controller=UsuarioController&accion=show");
         }
 
-        $usuario = UsuarioModel::getUserByEmail($texto);
-
         $this->render('menuadmin.view.php', [
-            "usuarios" => $usuario ? [(array) $usuario] : []
+            "usuarios" => UsuarioModel::getUserByName($texto)
             ]);
     }
-
-
-
-
-
 
 
 
