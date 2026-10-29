@@ -1,0 +1,78 @@
+.formulario-respuesta, .formulario-respuesta form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.formulario-respuesta{
+    padding: 1rem 0;
+    border-top: 0.3px solid var(--color-negro);
+    width: 100%;
+}
+
+.formulario-respuesta form, #contenido{
+    width: 100%;
+}
+
+.acciones{
+    align-self: flex-start;
+}
+
+.acciones a, .pregunta-footer-acciones >*{
+    background-color: var(--color-blanco);
+    border: .3px solid var(--color-negro);
+    color: var(--color-negro);
+}
+
+.pregunta-footer-acciones button, .pregunta-footer-acciones i{
+    color: var(--color-negro);
+}
+
+.pregunta-footer-acciones{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.pregunta-body {
+    gap: 1rem;
+}
+
+.pregunta-imagen{
+    width: 100%;
+    max-width: 40rem;
+    height: auto;
+    border-radius: 10px;
+}
+
+main div:nth-child(2){
+    border: none;
+}
+
+
+.respuesta-seleccionada{
+    padding: 0 2rem 1rem 2rem;
+    border: 2px solid var(--color-verde);
+}
+
+.mensaje-respuesta-seleccionada{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    background-color: var(--color-verde);
+    padding: .5rem 2rem;
+    margin: 0 -2rem 0 -2rem;
+
+}
+
+.mensaje-respuesta-seleccionada>*{
+    color: var(--color-blanco);
+}
+
+.contenido{
+    white-space: pre-wrap;
+}

@@ -3,16 +3,7 @@ form{
     flex-direction: column;
     gap: 1rem;
     margin-top: 3rem;
-    width: 40%;
-}
-
-#titulo, #contenido{
-    border: .3px solid var(--color-negro);
-    padding: .4rem .6rem;
-}
-
-#contenido{
-    min-height: 10rem;
+    width: 80%;
 }
 
 .acciones{
@@ -20,22 +11,7 @@ form{
     gap: 1rem;
 }
 
-.acciones>*{
-    display: flex;
-    align-items: center;
-    background-color: var(--color-secundario);
-    padding: .5rem 1rem;
-    border-radius: 10px;
-    color: var(--color-blanco);
-    font-size: 16px;
-    cursor: pointer;
-}
 
-.acciones :first-child{
-    background-color: var(--color-blanco);
-    border: .5px solid var(--color-negro);
-    color: var(--color-negro);
-}
 
 .archivos {
     display: flex;

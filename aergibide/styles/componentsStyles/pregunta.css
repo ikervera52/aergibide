@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px; /* Espaciado entre la cabecera, cuerpo y pie */
-    width: 60%;
+    width: 100%;
     padding: 1rem 0;
     border-top: .1px solid black;
 }
@@ -64,3 +64,71 @@
     cursor:pointer;
 }
 
+.seleccionada{
+    background-color: var(--color-principal) !important;
+}
+
+.pregunta-resuelta{
+    display: flex;
+    align-items: center;
+    background-color: var(--color-verde);
+    padding: .1rem .5rem;
+    border-radius: 10px;
+    gap: .4rem;
+}
+
+.pregunta-resuelta>*{
+    color: var(--color-blanco);
+}
+
+.acciones-admin-pregunta {
+    position: relative;
+}
+
+.btn-menu-admin {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.menu-desplegable-admin {
+    position: absolute;
+    right: 0;           
+    top: 100%;          
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    min-width: 120px;
+}
+
+.menu-desplegable-admin.oculto {
+    display: none;
+}
+
+/* Estilo del botón eliminar */
+.menu-desplegable-admin .opcion-eliminar, .menu-desplegable-admin .opcion-seleccionar {
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-rojo);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-desplegable-admin .opcion-seleccionar{
+    color: var(--color-verde);
+}
+
+.menu-desplegable-admin .opcion-seleccionar:hover{
+    background-color: rgb(247, 250, 242);
+}
+
+.menu-desplegable-admin .opcion-eliminar:hover {
+    background-color: #f7e8e9;
+}

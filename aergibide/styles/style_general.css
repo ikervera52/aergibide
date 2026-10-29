@@ -42,6 +42,8 @@ main{
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    width: 60%;
+    margin: 0 auto;
 }
 
 h1{
@@ -70,6 +72,31 @@ button{
     border: none;
 
 }
+
+button, button >i {
+    color: var(--color-blanco);
+}
+
+.acciones>*{
+    display: flex;
+    align-items: center;
+    background-color: var(--color-secundario);
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    color: var(--color-blanco);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#titulo, #contenido{
+    border: .3px solid var(--color-negro);
+    padding: .4rem .6rem;
+}
+
+#contenido{
+    min-height: 10rem;
+}
+
 /* FOOTER */
 footer{
     display: flex;
@@ -128,4 +155,54 @@ header{
 
 i.bi{
     font-size: 22px;
+}
+
+/* NOTIFICACIONES */
+#capaNotificaciones {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 800;
+}
+
+#panelNotificaciones {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    width: 20rem;
+    height: calc(100% - 55px);
+    overflow-y: auto;
+    background-color: var(--color-blanco);
+    z-index: 900;
+}
+
+#capaNotificaciones[hidden],
+#panelNotificaciones[hidden] {
+    display: none;
+}
+
+.notificacion {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.notificacion > a:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+}
+
+.eliminar-notificacion {
+    color: var(--color-principal);
+    text-decoration: underline;
+}
+
+.sinNotificaciones {
+    padding: 1.5rem 1rem;
 }

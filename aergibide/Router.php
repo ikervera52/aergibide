@@ -1,12 +1,23 @@
 <?php
 
+require_once __DIR__ . '/controllers/BaseController.php';
+
 class Router {
     
     // Como el router no tiene estados, los métodos pueden ser estáticos.
     public static function dispatch() {
+
+        
+
         // Determinar controlador (por defecto EmpleadoController)
         $controllerName = $_POST['controller'] ?? $_GET['controller'] ?? 'PreguntaController';
         
+        // Mirar por cada peticion si el usuario esta logeado.
+        if($controllerName != 'UsuarioController'){
+            $requireLogin = new BaseController();
+            $requireLogin->requireLogin();
+        }
+
         // Determinar acción (por defecto index)
         $action = $_POST['accion'] ?? $_GET['accion'] ?? 'index';
         

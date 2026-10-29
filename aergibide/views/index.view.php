@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Aergibide | Inicio</title>
+    <link rel="icon" type="image/png" href="views/components/Aergibide.png">
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/viewsStyles/index.view.css">
     <link rel="stylesheet" href="styles/componentsStyles/pregunta.css">
     <!-- Biblioteca de Iconos-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -17,7 +19,7 @@
     <main>
 
     <div class="contenedorBuscador">
-        <h1>Bienvenido, Usuario!</h1> <!-- Falta poner la variable de nombre usuario -->
+        <h1>Bienvenido/a, <?= htmlspecialchars($_SESSION['usuario']['nombre']) ?>!</h1>
 
         <a class="hacerPregunta" href="index.php?accion=create">Hacer una pregunta <i class="bi bi-person-raised-hand"></i> </a>
 

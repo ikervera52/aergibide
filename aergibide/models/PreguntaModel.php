@@ -7,70 +7,217 @@ class PreguntaModel {
         $db = Database::getConnection();
 
         $query = $db->prepare("SELECT 
-                                pr.id,
-                                pr.titulo, 
-                                pr.contenido, 
-                                pr.datetime, 
-                                us.nombre,
-                                fp.ruta_archivo,
-                                COUNT(re.id) AS respuestas_count
-                            FROM preguntas pr 
-                            INNER JOIN usuarios us ON pr.usuario_id = us.id
-                            INNER JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
-                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
-                            GROUP BY 
-                                pr.id, 
-                                pr.titulo, 
-                                pr.contenido, 
-                                pr.datetime, 
-                                us.nombre, 
-                                fp.ruta_archivo;");
-        
-        $query->execute();
+                                    pr.id,
+                                    pr.usuario_id,
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    pr.estado,
+                                    us.nombre,
+                                    fp.ruta_archivo,
+                                    COUNT(DISTINCT re.id) AS respuestas_count,
+                                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
+                                FROM preguntas pr 
+                                INNER JOIN usuarios us ON pr.usuario_id = us.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                                LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                                GROUP BY 
+                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
+                                    us.nombre, fp.ruta_archivo, pd.usuario_id
+                                ORDER BY pr.datetime DESC");
+
+        $query->execute(['usuario_id' => $_SESSION['usuario']['id']]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function getByContenido($texto) {
+    public static function getById($id) {
+        $db = Database::getConnection();
+        $query = $db->prepare("SELECT 
+                                    pr.id,
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    pr.estado,
+                                    us.nombre,
+                                    fp.ruta_archivo,
+                                    ar.ruta_archivo AS ruta_archivo_adjunto,
+                                    COUNT(DISTINCT re.id) AS respuestas_count,
+                                    CASE 
+                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
+                                        ELSE 0 
+                                    END AS marcada_por_usuario
+                                FROM preguntas pr 
+                                INNER JOIN usuarios us ON pr.usuario_id = us.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                                LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                                LEFT JOIN archivos ar ON pr.id = ar.pregunta_id
+                                WHERE pr.id = :id
+                                GROUP BY 
+                                    pr.id, 
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.datetime, 
+                                    us.nombre, 
+                                    fp.ruta_archivo,
+                                    pd.usuario_id,
+                                    ar.ruta_archivo;");
+        $query->execute(['id' => $id, 'usuario_id' => $_SESSION['usuario']['id']]);
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
 
+    public static function getByContenido($texto) {
         $db = Database::getConnection();
 
         $query = $db->prepare("SELECT 
+                                    pr.id,
+                                    pr.usuario_id,
+                                    pr.titulo, 
+                                    pr.contenido, 
+                                    pr.estado,
+                                    pr.datetime, 
+                                    us.nombre,
+                                    fp.ruta_archivo,
+                                    COUNT(DISTINCT re.id) AS respuestas_count,
+                                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
+                                FROM preguntas pr 
+                                INNER JOIN usuarios us ON pr.usuario_id = us.id
+                                LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                                LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                                LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                                WHERE pr.contenido LIKE :contenido OR pr.titulo LIKE :titulo
+                                GROUP BY 
+                                    pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
+                                    us.nombre, fp.ruta_archivo, pd.usuario_id
+                                ORDER BY pr.datetime DESC");
+
+        $query->execute($texto + ['usuario_id' => $_SESSION['usuario']['id']]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public static function getByUsuarioId($id) {
+        $db = Database::getConnection();
+        $query = $db->prepare("SELECT 
+                                pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
+                                us.nombre,
+                                fp.ruta_archivo,
+                                COUNT(re.id) AS respuestas_count,
+                                CASE 
+                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
+                                        ELSE 0 
+                                    END AS marcada_por_usuario
+                            FROM preguntas pr
+                            INNER JOIN usuarios us ON pr.usuario_id = us.id
+                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                            WHERE pr.usuario_id = :id
+                            GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
+                            ORDER BY pr.datetime DESC");
+        $query->execute(['id' => $id, 'usuario_id' => $_SESSION['usuario']['id']]);
+        return $query->fetchAll();
+    }
+
+    public static function getDestacadasByUsuarioId($id) {
+        $db = Database::getConnection();
+        $query = $db->prepare("SELECT 
+                                pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
+                                us.nombre,
+                                fp.ruta_archivo,
+                                COUNT(re.id) AS respuestas_count,
+                                CASE 
+                                        WHEN pd.usuario_id IS NOT NULL THEN 1 
+                                        ELSE 0 
+                                    END AS marcada_por_usuario
+                            FROM preguntas_destacadas pd
+                            INNER JOIN preguntas pr ON pd.pregunta_id = pr.id
+                            INNER JOIN usuarios us ON pr.usuario_id = us.id
+                            LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
+                            LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            WHERE pd.usuario_id = :id
+                            GROUP BY pr.id,  pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
+                            ORDER BY pr.datetime DESC");
+        $query->execute(['id' => $id]);
+        return $query->fetchAll();
+    }
+    
+    public static function create($datos) {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("INSERT INTO preguntas (usuario_id, titulo, contenido) VALUES (:usuario_id, :titulo, :contenido)");
+        $stmt->execute($datos);
+        return $db->lastInsertId(); 
+    }
+
+    
+    public static function deleteById($id) {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM preguntas WHERE id = :id");
+        return $stmt->execute(['id' => $id]);
+    }
+
+    public static function saveMismaPregunta($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("INSERT INTO preguntas_destacadas (usuario_id, pregunta_id) VALUES (:usuario_id, :pregunta_id)");
+        return $stmt->execute($datos);
+    }
+    
+    public static function sumarMismaPregunta($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("UPDATE preguntas SET misma_pregunta = misma_pregunta + 1 WHERE id = :pregunta_id");
+        $stmt->execute($datos);
+    }
+
+    public static function removeMismaPregunta($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM preguntas_destacadas WHERE usuario_id = :usuario_id AND pregunta_id = :pregunta_id");
+        return $stmt->execute($datos);
+    }
+
+    public static function restarMismaPregunta($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("UPDATE preguntas SET misma_pregunta = misma_pregunta - 1 WHERE id = :pregunta_id");
+        $stmt->execute($datos);
+    }
+
+    public static function closeById($datos){
+        $db = Database::getConnection();
+        $stmt = $db->prepare("UPDATE preguntas SET estado = 'cerrado' WHERE id = :id");
+        return $stmt->execute(["id" => $datos]);
+    }
+
+    public static function deleteAll() {
+        
+    }
+
+    public static function getTop20() {
+    $db = Database::getConnection();
+
+    $query = $db->prepare("SELECT 
                                 pr.id,
+                                pr.usuario_id,
                                 pr.titulo, 
                                 pr.contenido, 
                                 pr.datetime, 
+                                pr.estado,
                                 us.nombre,
                                 fp.ruta_archivo,
-                                COUNT(re.id) AS respuestas_count
+                                COUNT(DISTINCT re.id) AS respuestas_count,
+                                COUNT(DISTINCT pv.usuario_id) AS votos,
+                                CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
                             FROM preguntas pr 
                             INNER JOIN usuarios us ON pr.usuario_id = us.id
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
-                            WHERE pr.contenido LIKE :contenido OR pr.titulo LIKE :titulo
+                            LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                            LEFT JOIN preguntas_destacadas pv ON pr.id = pv.pregunta_id
                             GROUP BY 
-                                pr.id, 
-                                pr.titulo, 
-                                pr.contenido, 
-                                pr.datetime, 
-                                us.nombre, 
-                                fp.ruta_archivo;");
-        $query->execute($texto);
-        return $query->fetchAll(PDO::FETCH_OBJ);
-    }
-    
-    public static function getById($id) {
-        
-    }
-    
-    public static function create($datos) {
-        
-    }
-    
-    public static function deleteById($id) {
-        
-    }
-    
-    public static function deleteAll() {
-        
-    }
+                                pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
+                                us.nombre, fp.ruta_archivo, pd.usuario_id
+                            ORDER BY votos DESC, pr.datetime DESC
+                            LIMIT 20");
+
+    $query->execute(['usuario_id' => $_SESSION['usuario']['id']]);
+    return $query->fetchAll(PDO::FETCH_OBJ);
+}
 }

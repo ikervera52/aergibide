@@ -53,8 +53,7 @@ CREATE TABLE respuestas (
   contenido VARCHAR(1000) NOT NULL,
   puntuacion INT NOT NULL DEFAULT 0,
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  seleccionada BOOLEAN NOT NULL DEFAULT FALSE,
-  CONSTRAINT fk_respuestas_pregunta 
+    CONSTRAINT fk_respuestas_pregunta 
     FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_respuestas_usuario 
@@ -104,16 +103,22 @@ CREATE TABLE notificaciones (
 -- Tabla: preguntas_destacadas
 -- --------------------------------------------------------
 CREATE TABLE preguntas_destacadas (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  usuario_id INT NOT NULL,
-  pregunta_id INT NOT NULL,
-  CONSTRAINT uq_destacada UNIQUE (usuario_id, pregunta_id),
-  CONSTRAINT fk_destacadas_pregunta 
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_destacadas_usuario 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+    pregunta_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    PRIMARY KEY (pregunta_id, usuario_id),
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- --------------------------------------------------------
+-- Tabla: respuestas votadas
+-- --------------------------------------------------------
+CREATE TABLE respuesta_votada (
+    respuesta_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    PRIMARY KEY (respuesta_id, usuario_id),
+    FOREIGN KEY (respuesta_id) REFERENCES respuestas(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
 COMMIT;
