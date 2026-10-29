@@ -30,7 +30,7 @@
     <div class="iconosDerechaHeader">
         <?php if($_SESSION["usuario"]["tipo"] === "admin"):?>
         <a href="index.php?controller=UsuarioController&accion=show">
-            <i class="bi bi-reception-4" style="color:var(--color-rojo)"></i>
+            <i class="bi bi-person-gear" style="color:var(--color-negro)"></i>
         </a>
         <?php endif; ?>
         <a href="index.php?controller=UsuarioController&accion=perfil">
