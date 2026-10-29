@@ -157,6 +157,15 @@ i.bi{
     font-size: 22px;
 }
 
+header a:hover i {
+    color: var(--color-principal) !important;
+}
+
+header a[href*="accion=logout"]:hover i {
+    color: rgb(172, 0, 0) !important;
+}
+
+
 /* NOTIFICACIONES */
 #capaNotificaciones {
     position: fixed;

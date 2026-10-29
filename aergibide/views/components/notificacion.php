@@ -3,7 +3,7 @@
         <h4><?= htmlspecialchars($notificacion->nombre) ?> ha respondido a tu pregunta</h4>
         <p>
             <?php if ($notificacion->contenido): ?>
-                <?= mb_strimwidth($notificacion->contenido, 0, 100, "...") ?>
+                <?= mb_strimwidth($notificacion->contenido, 0, 30, "...") ?>
             <?php else: ?>
                 <?= $notificacion->titulo ?>
             <?php endif; ?>
