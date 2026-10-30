@@ -24,6 +24,14 @@ $editando = ($modo ?? "crear") === "editar";
                placeholder="<?= $editando ? "Nueva password (vacío = no cambiar)" : "Password" ?>">
         <span class="error"></span>
 
+        <?php if ($editando): ?>
+        <select name="estado">
+            <option value="activo" <?= ($editando && $usuario->estado === "activo") || !$editando ? "selected" : "" ?>>activo</option>
+            <option value="inactivo" <?= $editando && $usuario->estado === "inactivo" ? "selected" : "" ?>>inactivo</option>
+        </select>
+        <span class="error"></span>
+        <?php endif; ?>
+
         <button type="submit"><?= $editando ? "Guardar cambios" : "Registrar" ?></button>
 
         <input type="hidden" name="controller" value="UsuarioController">

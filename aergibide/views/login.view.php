@@ -86,7 +86,7 @@ async function hacerLogin() {
         if (resultado.ok == true) {
             window.location.href = 'index.php?controller=UsuarioController';
         } else {
-            mensaje.textContent = 'Email o contraseña incorrectos';
+            mensaje.textContent = resultado.mensaje || 'Email o contraseña incorrectos';
         }
 
     } else {
