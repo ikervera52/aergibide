@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles/viewsStyles/menuadmin.view.css">
     <!-- Biblioteca de Iconos-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <?php require "layout/header.php"; ?>
@@ -65,7 +66,7 @@
                                     </form>
 
                                     <!-- ELIMINAR: borra el usuario con ese id -->
-                                    <form action="index.php" method="get" >
+                                    <form action="index.php" method="get" onsubmit="confirmarBorrado(event, this);">
                                         <input type="hidden" name="controller" value="UsuarioController">
                                         <input type="hidden" name="accion" value="destroy">
                                         <input type="hidden" name="id" value="<?= $valor['id'] ?>">
@@ -95,6 +96,27 @@
 
     </main>
     <?php require "layout/footer.php"; ?>
+
+<script>
+function confirmarBorrado(event, formulario) {
+
+    event.preventDefault();
+
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se podrá deshacer",
+        showCancelButton: true,
+        confirmButtonColor: '#5F46CB',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            formulario.submit();
+        }
+    });
+}
+</script>
 
 </body>
 </html>
