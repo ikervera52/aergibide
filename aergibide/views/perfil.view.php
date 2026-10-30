@@ -29,11 +29,14 @@ if (!$esMio) {
              alt="Foto de perfil" class="fotoPerfil">
 
         <div class="perfilDatos">
-            <h1 id="perfilNombre"><?= htmlspecialchars($usuario->nombre) ?></h1>
+            <div class="perfilVerificado">
+                <h1 id="perfilNombre"><?= htmlspecialchars($usuario->nombre) ?></h1>
+                <?php if($usuario->tipo == "admin") : ?>
+                    <i class="bi bi-check-circle-fill"></i>
+                <?php endif; ?>
+            </div>
 
-            <?php if ($esMio): ?>
-                <p id="perfilEmail"><?= htmlspecialchars($usuario->email) ?></p>
-            <?php endif; ?>
+        <p id="perfilEmail"><?= htmlspecialchars($usuario->email) ?></p>
 
             <small>Desde <?= date('d/m/Y', strtotime($usuario->datetime)) ?></small>
         </div>

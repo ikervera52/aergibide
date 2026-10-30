@@ -1,142 +1,71 @@
 START TRANSACTION;
 
 -- --------------------------------------------------------
--- Tabla: categorias_preguntas
+-- 1. Insertar fotos de perfil
 -- --------------------------------------------------------
+INSERT INTO foto_perfil_usuarios (id, nombre, ruta_archivo, mime_tipo, tamano) VALUES
+(1, 'Default Avatar', './uploads/avatars/default-avatar.png', 'image/png', 10240);
 
-CREATE TABLE categorias_preguntas (
-  id INT AUTO_INCREMENT,
-  nombre VARCHAR(100) NOT NULL,
-  slug VARCHAR (120) NOT NULL,
-  PRIMARY KEY (id)
-);
 
 -- --------------------------------------------------------
--- Tabla: foto_perfil_usuarios
+-- 2. Insertar usuarios (1 Admin, 1 Estándar y 1 adicional para interactuar)
 -- --------------------------------------------------------
-CREATE TABLE foto_perfil_usuarios (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  ruta_archivo VARCHAR(255) NOT NULL UNIQUE,
-  mime_tipo VARCHAR(127) NOT NULL,
-  tamano BIGINT NOT NULL
-) ENGINE=InnoDB;
+INSERT INTO usuarios (id, nombre, tipo, email, contrasena, foto_perfil_id) VALUES
+(1, 'Admin', 'admin', 'admin@ejemplo.com', '12345Abcde', 1),
+(2, 'Usuario', 'estandar', 'juan@ejemplo.com', '12345Abcde', 1);
 
 -- --------------------------------------------------------
--- Tabla: usuarios
+-- 3. Insertar categorías de preguntas
 -- --------------------------------------------------------
-CREATE TABLE usuarios (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(50) NOT NULL,
-  tipo VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL UNIQUE,
-  contrasena VARCHAR(255) NOT NULL,
-  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  foto_perfil_id INT NULL DEFAULT 1,
-  CONSTRAINT fk_usuario_foto_perfil 
-    FOREIGN KEY (foto_perfil_id) REFERENCES foto_perfil_usuarios (id) 
-    ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO categorias_preguntas (id, nombre, slug) VALUES
+(1, 'Programación Web', 'programacion-web'),
+(2, 'Bases de Datos', 'bases-de-datos'),
+(3, 'Sistemas Operativos', 'sistemas-operativos');
 
 -- --------------------------------------------------------
--- Tabla: preguntas
+-- 4. Insertar preguntas
 -- --------------------------------------------------------
-CREATE TABLE preguntas (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  usuario_id INT NOT NULL,
-  titulo VARCHAR(100) NOT NULL,
-  contenido TEXT NOT NULL,
-  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  estado VARCHAR(20) NOT NULL DEFAULT 'abierta',
-  misma_pregunta INT NOT NULL DEFAULT 0,
-  categoria_pregunta_id INT NOT NULL,
-  CONSTRAINT fk_categoria_pregunta 
-    FOREIGN KEY (categoria_pregunta_id) REFERENCES categorias_preguntas (id)
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_preguntas_usuario 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
-) ENGINE=InnoDB;
+INSERT INTO preguntas (id, usuario_id, titulo, contenido, estado, misma_pregunta, categoria_pregunta_id) VALUES
+(1, 2, '¿Cómo optimizar consultas SQL en MySQL?', 'Tengo una tabla con más de 1 millón de registros y las consultas van muy lentas. ¿Qué índices debería crear?', 'abierta', 3, 2),
+(2, 1, '¿Diferencia entre VARCHAR y TEXT?', 'No tengo claro cuándo debería usar VARCHAR(1000) o pasar directamente a un campo de tipo TEXT.', 'cerrada', 1, 2),
+(3, 1, 'Mantenimiento del servidor programado', 'El próximo domingo realizaremos tareas de mantenimiento en el servidor principal de 02:00 a 04:00 AM.', 'abierta', 0, 3);
 
 -- --------------------------------------------------------
--- Tabla: respuestas
+-- 5. Insertar respuestas
 -- --------------------------------------------------------
-CREATE TABLE respuestas (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  pregunta_id INT NOT NULL,
-  usuario_id INT NOT NULL,
-  contenido TEXT NOT NULL,
-  puntuacion INT NOT NULL DEFAULT 0,
-  seleccionada TINYINT NOT NULL DEFAULT 0,
-  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_respuestas_pregunta 
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_respuestas_usuario 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
-) ENGINE=InnoDB;
+INSERT INTO respuestas (id, pregunta_id, usuario_id, contenido, puntuacion, seleccionada) VALUES
+(1, 1, 1, 'Asegúrate de agregar índices en las columnas que usas con frecuencia en la cláusula WHERE y JOIN. También revisa la ejecución con EXPLAIN.', 12, 1),
+(2, 1, 1, 'Yo suelo usar EXPLAIN SELECT para ver si está usando los índices correctamente.', 4, 0),
+(3, 2, 2, 'Usa VARCHAR cuando conozcas una longitud máxima razonable. Usa TEXT para textos largos sin límite definido.', 8, 1);
 
 -- --------------------------------------------------------
--- Tabla: archivos
+-- 6. Insertar archivos adjuntos
 -- --------------------------------------------------------
-CREATE TABLE archivos (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  pregunta_id INT DEFAULT NULL,
-  respuesta_id INT DEFAULT NULL,
-  nombre VARCHAR(255) NOT NULL,
-  ruta_archivo VARCHAR(255) NOT NULL UNIQUE,
-  mime_tipo VARCHAR(127) NOT NULL,
-  tamano BIGINT NOT NULL,
-  CONSTRAINT fk_adjunto_pregunta 
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_adjunto_respuesta 
-    FOREIGN KEY (respuesta_id) REFERENCES respuestas (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO archivos (id, pregunta_id, respuesta_id, nombre, ruta_archivo, mime_tipo, tamano) VALUES
+(1, 1, NULL, 'ejemplo_query.sql', 'uploads/adjuntos/ejemplo_query.sql', 'text/plain', 2048),
+(2, NULL, 1, 'explain_plan.png', 'uploads/adjuntos/explain_plan.png', 'image/png', 45000);
 
 -- --------------------------------------------------------
--- Tabla: notificaciones
+-- 7. Insertar notificaciones
 -- --------------------------------------------------------
-CREATE TABLE notificaciones (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  usuario_id_p INT NOT NULL,
-  usuario_id_r INT NOT NULL,
-  pregunta_id INT NOT NULL,
-  respuesta_id INT NOT NULL,
-  CONSTRAINT fk_notif_respuesta
-    FOREIGN KEY (respuesta_id) REFERENCES respuestas (id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_notif_pregunta 
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_notif_usuario_p 
-    FOREIGN KEY (usuario_id_p) REFERENCES usuarios (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_notif_usuario_r 
-    FOREIGN KEY (usuario_id_r) REFERENCES usuarios (id) 
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO notificaciones (id, usuario_id_p, usuario_id_r, pregunta_id, respuesta_id) VALUES
+(1, 2, 1, 1, 1), -- Notificación a Juan (creador de pregunta 1) sobre la respuesta de Admin
+(2, 1, 2, 2, 1); -- Notificación a Maria (creadora de pregunta 2) sobre la respuesta de Juan
 
 -- --------------------------------------------------------
--- Tabla: preguntas_destacadas
+-- 8. Insertar preguntas destacadas (favoritas)
 -- --------------------------------------------------------
-CREATE TABLE preguntas_destacadas (
-    pregunta_id INT NOT NULL,
-    usuario_id INT NOT NULL,
-    PRIMARY KEY (pregunta_id, usuario_id),
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
-);
+INSERT INTO preguntas_destacadas (pregunta_id, usuario_id) VALUES
+(1, 2),
+(1, 1),
+(2, 1);
 
 -- --------------------------------------------------------
--- Tabla: respuestas votadas
+-- 9. Insertar respuestas votadas
 -- --------------------------------------------------------
-CREATE TABLE respuestas_votadas (
-    respuesta_id INT NOT NULL,
-    usuario_id INT NOT NULL,
-    PRIMARY KEY (respuesta_id, usuario_id),
-    FOREIGN KEY (respuesta_id) REFERENCES respuestas(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
-);
+INSERT INTO respuestas_votadas (respuesta_id, usuario_id) VALUES
+(1, 2),
+(1, 1),
+(2, 1);
 
 COMMIT;

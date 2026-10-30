@@ -14,6 +14,7 @@ class PreguntaModel {
                                     pr.datetime, 
                                     pr.estado,
                                     us.nombre,
+                                    us.tipo AS tipo_usuario,
                                     fp.ruta_archivo,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
                                     CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
@@ -40,6 +41,7 @@ class PreguntaModel {
                                     pr.datetime, 
                                     pr.estado,
                                     us.nombre,
+                                    us.tipo AS tipo_usuario,
                                     fp.ruta_archivo,
                                     ar.ruta_archivo AS ruta_archivo_adjunto,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
@@ -83,6 +85,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                    pr.estado,
                    pr.datetime, 
                    us.nombre,
+                   us.tipo AS tipo_usuario,
                    fp.ruta_archivo,
                    COUNT(DISTINCT re.id) AS respuestas_count,
                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
@@ -131,6 +134,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
         $query = $db->prepare("SELECT 
                                 pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
                                 us.nombre,
+                                us.tipo AS tipo_usuario,
                                 fp.ruta_archivo,
                                 COUNT(re.id) AS respuestas_count,
                                 CASE 
@@ -154,6 +158,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
         $query = $db->prepare("SELECT 
                                 pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, pr.estado,
                                 us.nombre,
+                                us.tipo AS tipo_usuario,
                                 fp.ruta_archivo,
                                 COUNT(re.id) AS respuestas_count,
                                 CASE 
@@ -231,6 +236,8 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                                 pr.datetime, 
                                 pr.estado,
                                 us.nombre,
+                                us.tipo AS tipo_usuario,
+                                us.tipo,
                                 fp.ruta_archivo,
                                 COUNT(DISTINCT re.id) AS respuestas_count,
                                 COUNT(DISTINCT pv.usuario_id) AS votos,

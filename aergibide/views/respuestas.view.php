@@ -28,6 +28,9 @@
                 <a href="index.php?controller=usuarioController" class="pregunta-usuario">
                     <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$pregunta->ruta_archivo?>" alt="Foto de perfil">
                     <small><?=$pregunta->nombre?></small>
+                    <?php if($pregunta->tipo_usuario == "admin") : ?>
+                    <i style="font-size: 15px; margin-left: -3px;" class="bi bi-check-circle"></i>
+                    <?php endif; ?>
                 </a>
                 <div class="pregunta-meta">
                     <small><?=$pregunta->datetime?></small>
@@ -70,6 +73,9 @@
                         <a href="index.php?controller=usuarioController" class="respuesta-usuario">
                             <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$respuesta->ruta_archivo?>" alt="Foto de perfil">
                             <small><?=$respuesta->nombre?></small>
+                            <?php if($respuesta->tipo_usuario == "admin") : ?>
+                            <i style="font-size: 15px; margin-left: -3px;" class="bi bi-check-circle"></i>
+                            <?php endif; ?>
                         </a>
 
                         <div class="pregunta-meta">
