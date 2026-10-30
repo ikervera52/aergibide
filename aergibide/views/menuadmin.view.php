@@ -49,11 +49,12 @@
                     <?php if (empty($usuarios)): ?>
                                 <p>No se encontró ningún usuario con ese email.</p>
                             <?php else: ?>
-                                <tr><th>Nombre</th><th>Email</th><th>Tipo</th><th>Acciones</th></tr>
+                                <tr><th>Nombre</th><th>Email</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr>
                             <?php foreach($usuarios as $valor):?>
                                 <tr><td><?= $valor["nombre"]?>
                                 </td><td><?= $valor["email"]?></td>
                                 <td><?= $valor["tipo"]?></td>
+                                <td><?= $valor["estado"]?></td>
 
                                 <td>
                                     <!-- EDITAR: redirige a la página de edición con el id -->
