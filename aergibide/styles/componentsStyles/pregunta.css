@@ -56,6 +56,14 @@
     background-color: var(--color-secundario);
 }
 
+.categoriaPregunta{
+    display: flex;
+    align-items: center;
+    border: .3px solid var(--color-negro);
+    border-radius: 10px;
+    padding: .2rem .4rem;
+}
+
 .pregunta-footer button, .pregunta-footer i{
     color: var(--color-blanco);
 }
