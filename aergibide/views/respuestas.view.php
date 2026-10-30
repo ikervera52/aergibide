@@ -32,7 +32,11 @@
                     <i style="font-size: 15px; margin-left: -3px;" class="bi bi-check-circle"></i>
                     <?php endif; ?>
                 </a>
+                
                 <div class="pregunta-meta">
+                    <div class="categoriaPregunta">
+                        <small><?=$pregunta->categoria?></small>
+                    </div>
                     <small><?=$pregunta->datetime?></small>
                 </div>
             </div>

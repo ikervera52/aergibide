@@ -14,6 +14,7 @@ class PreguntaModel {
                                     pr.datetime, 
                                     pr.estado,
                                     us.nombre,
+                                    cp.nombre AS categoria,
                                     us.tipo AS tipo_usuario,
                                     fp.ruta_archivo,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
@@ -23,6 +24,7 @@ class PreguntaModel {
                                 LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                                 LEFT JOIN respuestas re ON pr.id = re.pregunta_id
                                 LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                                LEFT JOIN categorias_preguntas cp ON cp.id = pr.categoria_pregunta_id
                                 GROUP BY 
                                     pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
                                     us.nombre, fp.ruta_archivo, pd.usuario_id
@@ -44,6 +46,7 @@ class PreguntaModel {
                                     us.tipo AS tipo_usuario,
                                     fp.ruta_archivo,
                                     ar.ruta_archivo AS ruta_archivo_adjunto,
+                                    cp.nombre AS categoria,
                                     COUNT(DISTINCT re.id) AS respuestas_count,
                                     CASE 
                                         WHEN pd.usuario_id IS NOT NULL THEN 1 
@@ -55,6 +58,7 @@ class PreguntaModel {
                                 LEFT JOIN respuestas re ON pr.id = re.pregunta_id
                                 LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
                                 LEFT JOIN archivos ar ON pr.id = ar.pregunta_id
+                                LEFT JOIN categorias_preguntas cp ON cp.id = pr.categoria_pregunta_id
                                 WHERE pr.id = :id
                                 GROUP BY 
                                     pr.id, 
@@ -87,6 +91,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                    us.nombre,
                    us.tipo AS tipo_usuario,
                    fp.ruta_archivo,
+                   cp.nombre AS categoria,
                    COUNT(DISTINCT re.id) AS respuestas_count,
                    CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
             FROM preguntas pr 
@@ -94,6 +99,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
             LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+            LEFT JOIN categorias_preguntas cp ON cp.id = pr.categoria_pregunta_id
             WHERE (pr.contenido LIKE :contenido OR pr.titulo LIKE :titulo)";
 
     // Filtro por Categoría
@@ -136,6 +142,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                                 us.nombre,
                                 us.tipo AS tipo_usuario,
                                 fp.ruta_archivo,
+                                cp.nombre AS categoria,
                                 COUNT(re.id) AS respuestas_count,
                                 CASE 
                                         WHEN pd.usuario_id IS NOT NULL THEN 1 
@@ -146,6 +153,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
                             LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
+                            LEFT JOIN categorias_preguntas cp ON cp.id = pr.categoria_pregunta_id
                             WHERE pr.usuario_id = :id
                             GROUP BY pr.id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
                             ORDER BY pr.datetime DESC");
@@ -160,6 +168,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                                 us.nombre,
                                 us.tipo AS tipo_usuario,
                                 fp.ruta_archivo,
+                                cp.nombre AS categoria,
                                 COUNT(re.id) AS respuestas_count,
                                 CASE 
                                         WHEN pd.usuario_id IS NOT NULL THEN 1 
@@ -170,6 +179,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                             INNER JOIN usuarios us ON pr.usuario_id = us.id
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
                             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
+                            LEFT JOIN categorias_preguntas cp ON cp.id = pr.categoria_pregunta_id
                             WHERE pd.usuario_id = :id
                             GROUP BY pr.id,  pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, pr.misma_pregunta, us.nombre, fp.ruta_archivo
                             ORDER BY pr.datetime DESC");
@@ -239,6 +249,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                                 us.tipo AS tipo_usuario,
                                 us.tipo,
                                 fp.ruta_archivo,
+                                cp.nombre AS categoria,
                                 COUNT(DISTINCT re.id) AS respuestas_count,
                                 COUNT(DISTINCT pv.usuario_id) AS votos,
                                 CASE WHEN pd.usuario_id IS NOT NULL THEN 1 ELSE 0 END AS marcada_por_usuario
@@ -248,6 +259,7 @@ public static function getByFiltros($texto, $categoria_id, $fecha) {
                             LEFT JOIN respuestas re ON pr.id = re.pregunta_id
                             LEFT JOIN preguntas_destacadas pd ON pr.id = pd.pregunta_id AND pd.usuario_id = :usuario_id
                             LEFT JOIN preguntas_destacadas pv ON pr.id = pv.pregunta_id
+                            LEFT JOIN categorias_preguntas cp ON cp.id = pr.categoria_pregunta_id
                             GROUP BY 
                                 pr.id, pr.usuario_id, pr.titulo, pr.contenido, pr.datetime, 
                                 us.nombre, fp.ruta_archivo, pd.usuario_id

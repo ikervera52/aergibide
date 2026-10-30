@@ -9,6 +9,9 @@
             <?php endif; ?>
         </a>
         <div class="pregunta-meta">
+            <div class="categoriaPregunta">
+                <small><?=$pregunta->categoria?></small>
+            </div>
             <small><?=$pregunta->datetime?></small>
             <?php if($tipoUsuario == "admin") : ?>
                 <div class="acciones-admin-pregunta">
