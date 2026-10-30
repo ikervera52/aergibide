@@ -41,3 +41,7 @@
 #formUsuario button[type="submit"]:hover {
     background: var(--color-principal);
 }
+
+#boton-cancelar{
+    background-color: white;
+}

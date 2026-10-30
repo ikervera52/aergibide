@@ -50,7 +50,7 @@
             <?php endif; ?>
 
             <div class="acciones">
-                <a href="index.php">Cancelar</a>
+                <a id="boton-cancelar" href="index.php">Cancelar</a>
                 
                 <input type="hidden" name="tipo-interaccion" value="pregunta">
                 <input type="hidden" name="accion" value="store">

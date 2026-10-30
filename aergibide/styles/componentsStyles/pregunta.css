@@ -141,3 +141,9 @@
     transform: scale(1.15);
     color: var(--color-principal);
 }
+
+#boton-misma-pregunta:hover{
+ background-color: #cb46c2 !important;
+ cursor: pointer;
+}
+
