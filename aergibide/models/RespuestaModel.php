@@ -8,6 +8,7 @@ class RespuestaModel {
         $stmt = $db->prepare("SELECT 
                                 re.id, re.contenido, re.datetime, re.usuario_id, re.puntuacion, re.seleccionada,
                                 us.nombre,
+                                us.tipo AS tipo_usuario,
                                 fp.ruta_archivo,
                                 ar.ruta_archivo AS ruta_archivo_adjunto,
                                 CASE 

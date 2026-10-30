@@ -89,7 +89,8 @@ class UsuarioController extends BaseController {
         $usuarios = UsuarioModel::getAll();
         $this->render('menuadmin.view.php', [
             "usuarios" => $usuarios,
-            "preguntas" => $preguntas
+            "preguntas" => $preguntas,
+            "tipoUsuario" => $_SESSION["usuario"]["tipo"]
             ]);
         
         
