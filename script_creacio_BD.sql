@@ -1,6 +1,17 @@
 START TRANSACTION;
 
 -- --------------------------------------------------------
+-- Tabla: categorias_preguntas
+-- --------------------------------------------------------
+
+CREATE TABLE categorias_preguntas (
+  id INT AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  slug VARCHAR (120) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- --------------------------------------------------------
 -- Tabla: foto_perfil_usuarios
 -- --------------------------------------------------------
 CREATE TABLE foto_perfil_usuarios (
@@ -34,14 +45,14 @@ CREATE TABLE preguntas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   usuario_id INT NOT NULL,
   titulo VARCHAR(100) NOT NULL,
-  contenido VARCHAR(1000) NOT NULL,
+  contenido TEXT NOT NULL,
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   estado VARCHAR(20) NOT NULL DEFAULT 'abierta',
   misma_pregunta INT NOT NULL DEFAULT 0,
   categoria_pregunta_id INT NOT NULL,
   CONSTRAINT fk_categoria_pregunta 
     FOREIGN KEY (categoria_pregunta_id) REFERENCES categorias_preguntas (id)
-    ON DELETE SET NULL ON UPDATE CASCADE,
+    ON UPDATE CASCADE,
   CONSTRAINT fk_preguntas_usuario 
     FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
 ) ENGINE=InnoDB;
@@ -53,11 +64,11 @@ CREATE TABLE respuestas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pregunta_id INT NOT NULL,
   usuario_id INT NOT NULL,
-  contenido VARCHAR(1000) NOT NULL,
+  contenido TEXT NOT NULL,
   puntuacion INT NOT NULL DEFAULT 0,
-  seleccionada TINYINT NOT NULL DEFALUT 0,
+  seleccionada TINYINT NOT NULL DEFAULT 0,
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_respuestas_pregunta 
+  CONSTRAINT fk_respuestas_pregunta 
     FOREIGN KEY (pregunta_id) REFERENCES preguntas (id) 
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_respuestas_usuario 
@@ -127,12 +138,5 @@ CREATE TABLE respuestas_votadas (
     FOREIGN KEY (respuesta_id) REFERENCES respuestas(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
-
-CREATE TABLE categorias_preguntas (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(100) NOT NULL,
-  slug VARCHAR (120) NOT NULL,
-  PRIMARY KEY (id)
-)
 
 COMMIT;
