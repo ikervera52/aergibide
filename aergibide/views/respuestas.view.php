@@ -20,7 +20,7 @@
     <main>
 
         <div class="acciones">
-            <a href="index.php">Volver</a>
+            <a href="index.php"> <i style="font-size: 18px; margin-left: -8px " class="bi bi-chevron-left"></i> Volver</a>
         </div>
 
         <div class="pregunta">
@@ -93,9 +93,11 @@
                                             <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
                                         </button>
                                         
-                                        <button class="opcion-seleccionar" onclick="seleccionarRespuesta(this, <?=$respuesta->id ?? 0; ?>, <?=$pregunta->id?>)">
-                                            <i style="color: var(--color-verde)"class="bi bi-check2-circle"></i> Correcta
-                                        </button>
+                                        <?php if($pregunta->estado == "abierta") :?>
+                                            <button class="opcion-seleccionar" onclick="seleccionarRespuesta(this, <?=$respuesta->id ?? 0; ?>, <?=$pregunta->id?>)">
+                                                <i style="color: var(--color-verde)"class="bi bi-check2-circle"></i> Correcta
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -124,7 +126,7 @@
                     <input type="hidden" name="pregunta_id" value="<?=$pregunta->id?>">
                     <textarea name="contenido" id="contenido" placeholder="Escribe tu respuesta aquí..." required></textarea>
                     <input type="file" id="archivo" name="archivo">
-                 
+                
                     <?php if(isset($error)) : ?>
 
                     <small style="color: var(--color-rojo);"><?=$error?></small>
