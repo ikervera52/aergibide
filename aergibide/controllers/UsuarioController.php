@@ -20,17 +20,30 @@ class UsuarioController extends BaseController {
 
         $usuario = UsuarioModel::getUserByEmail($datos['email'] ?? '');
 
+
+
+
+
         if ($usuario && $usuario->contrasena == ($datos['password'] ?? '')) {
 
+
+            if($usuario->estado == "inactivo"){
+                $this->json(['ok' => false, 'mensaje' => 'Usuario inactivo']);
+            } else{
             $_SESSION['usuario'] = [
                 'id'     => $usuario->id,
                 'nombre' => $usuario->nombre,
-                'tipo'   => $usuario->tipo
+                'tipo'   => $usuario->tipo,
+                'estado' => $usuario->estado
             ];
 
             $this->json(['ok' => true]);
+            }
+
+
+            
         } else {
-            $this->json(['ok' => false]);
+            $this->json(['ok' => false, 'mensaje' => 'Email o contraseña incorrectos']);
         }
     }
 
@@ -223,6 +236,7 @@ class UsuarioController extends BaseController {
             "nombre"   => $_GET["nombre"] ?? "",
             "email"    => $_GET["email"] ?? "",
             "tipo"     => $_GET["tipo"] ?? "",
+            "estado"    => $_GET["estado"] ?? "",
             "password" => $_GET["password"] ?? ""
         ]);
        
@@ -238,7 +252,7 @@ class UsuarioController extends BaseController {
         }
 
         $this->render('menuadmin.view.php', [
-            "usuarios" => UsuarioModel::getUserByName($texto)
+            "usuarios" => UsuarioModel::getUserByEmail2($texto)
             ]);
     }
 

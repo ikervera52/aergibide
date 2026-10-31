@@ -18,7 +18,7 @@
 
 <main>
     <?php $modo = "editar"; require __DIR__ . "/components/formulario_usuario.php"; ?>
-    <a href="index.php?controller=UsuarioController&accion=show">Volver</a>
+    <a id="boton-volver" href="index.php?controller=UsuarioController&accion=show">Volver</a>
 </main>
 
 <?php require "layout/footer.php"; ?>

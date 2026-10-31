@@ -39,7 +39,7 @@
             <h4> Resuelta</h4>
         </div>
         <?php endif; ?>
-        <button onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
+        <button id="boton-misma-pregunta" onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
         <small class="respuestas-count"><?=$pregunta->respuestas_count?> respuestas</small>
 
     </div>

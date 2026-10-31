@@ -5,7 +5,7 @@ class UsuarioModel {
     
     public static function getAll() {
         $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT id, nombre, email, tipo
+        $stmt = $db->prepare("SELECT id, nombre, email, tipo, estado
                               FROM usuarios");
         $stmt -> execute();
 
@@ -17,7 +17,7 @@ class UsuarioModel {
     public static function getUserById($id) {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT 
-                                us.id, us.nombre, us.tipo, us.email, us.datetime, us.foto_perfil_id,
+                                us.id, us.nombre, us.tipo, us.email, us.datetime, us.foto_perfil_id, us.estado,
                                 fp.ruta_archivo
                             FROM usuarios us
                             LEFT JOIN foto_perfil_usuarios fp ON us.foto_perfil_id = fp.id
@@ -29,7 +29,7 @@ class UsuarioModel {
     public static function getUserByEmail($email) {
         $data = ['email' => $email];
         $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT id, nombre, tipo, email, contrasena, datetime FROM usuarios WHERE email = :email");
+        $stmt = $db->prepare("SELECT id, nombre, tipo, email, contrasena, datetime, estado FROM usuarios WHERE email = :email");
         $stmt->execute($data);
         return $stmt->fetch();     
     }
@@ -84,20 +84,22 @@ class UsuarioModel {
         $db = Database::getConnection();
         
         if ($datos["password"] === "") {
-        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo WHERE id = :id";
+        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo, estado = :estado WHERE id = :id";
         $params = [
             ":nombre" => $datos["nombre"],
             ":email"  => $datos["email"],
             ":tipo"   => $datos["tipo"],
+            ":estado" => $datos["estado"],
             ":id"     => $datos["id"]
         ];
         } else {
-        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo, contrasena = :password WHERE id = :id";   
+        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, tipo = :tipo, contrasena = :password, estado = :estado WHERE id = :id";   
         $params = [
             ":nombre"   => $datos["nombre"],
             ":email"    => $datos["email"],
             ":tipo"     => $datos["tipo"],
             ":password" => $datos["password"],
+            ":estado" => $datos["estado"],
             ":id"       => $datos["id"]
         ];
         }
@@ -106,10 +108,12 @@ class UsuarioModel {
     }
 
 
-    public static function getUserByName($texto){
+    public static function getUserByEmail2($texto){
         $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT * FROM usuarios WHERE nombre LIKE :texto");
+        $stmt = $db->prepare("SELECT * FROM usuarios WHERE email LIKE :texto");
         $stmt->execute([":texto" => "%" . $texto . "%"]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
 }
