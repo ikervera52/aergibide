@@ -10,7 +10,7 @@
     
     /* Colores de estado / semánticos */
     --color-rojo: #FF7878;
-    --color-verde: #C0DA7D;
+    --color-verde: #acd349;
     --color-naranja: #FFD478;
 }
 
@@ -117,7 +117,7 @@ footer{
     align-items: flex-end;
     justify-content: space-between;
     padding: 2rem 2rem;
-    border-top: 0.1px solid black;
+    box-shadow: .5px .5px 3px rgba(0, 0, 0, 0.5);
 }
 
 .menuFooter{
@@ -155,7 +155,7 @@ header{
     align-items: center;
     justify-content: space-between;
     padding: 1rem 2rem;
-    border-bottom: 0.1px solid black;
+    box-shadow: .5px .5px 3px rgba(0, 0, 0, 0.5);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -164,6 +164,7 @@ header{
 
 .iconosDerechaHeader{
     display: flex;
+    justify-content: flex-end;
     gap: 1rem;
 }
 
@@ -176,7 +177,7 @@ header a:hover i {
 }
 
 header a[href*="accion=logout"]:hover i {
-    color: rgb(172, 0, 0) !important;
+    color: red !important;
 }
 
 

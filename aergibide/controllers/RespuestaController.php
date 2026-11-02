@@ -10,10 +10,15 @@ class RespuestaController extends BaseController {
     
     public function index() {
 
+        $pregunta = PreguntaModel::getById($_GET['id'] ?? 0);
+        if($pregunta == null){
+            $this->redirect("index.php");
+        }
+
         $this->render('respuestas.view.php', [
-            'pregunta' => PreguntaModel::getById($_GET['id'] ?? 0),
+            'pregunta' => $pregunta,
             'respuestas' => RespuestaModel::getByPreguntaId($_GET['id'] ?? 0),
-            'tipoUsuario' => $_SESSION["usuario"]["tipo"]
+            'usuario' => $_SESSION["usuario"]
         ]);
 
     }

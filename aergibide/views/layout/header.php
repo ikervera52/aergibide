@@ -5,7 +5,7 @@
     $tieneNotifi = count(NotificacionModel::getByUsuarioId($_SESSION['usuario']['id'])) > 0;
     
     ?>
-    <div>
+    <div style="width: 100%">
         <a href="#" id="btnNotificaciones">
             <i class="bi <?= $tieneNotifi ? 'bi-bell-fill' : 'bi-bell' ?>"></i>
         </a>
@@ -27,7 +27,7 @@
 </a>
 
 
-    <div class="iconosDerechaHeader">
+    <div style="width: 100%" class="iconosDerechaHeader">
         <?php if($_SESSION["usuario"]["tipo"] === "admin"):?>
         <a href="index.php?controller=UsuarioController&accion=show">
             <i class="bi bi-gear" style="color:var(--color-negro); font-size:25px"></i>

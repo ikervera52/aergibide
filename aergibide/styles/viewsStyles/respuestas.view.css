@@ -43,7 +43,8 @@
 }
 
 .pregunta-imagen{
-    width: 100%;
+    width: auto;
+    max-height: 30rem;
     max-width: 40rem;
     height: auto;
     border-radius: 10px;

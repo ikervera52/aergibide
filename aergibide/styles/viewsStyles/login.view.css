@@ -47,5 +47,6 @@ main{
 }
 #boton:hover {
     background-color: var(--color-principal);
+    cursor: pointer;
 }
 

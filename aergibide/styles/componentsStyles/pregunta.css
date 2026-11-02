@@ -142,8 +142,8 @@
     color: var(--color-principal);
 }
 
-#boton-misma-pregunta:hover{
- background-color: #cb46c2 !important;
- cursor: pointer;
+#boton-accion:hover{
+    background-color: #7c66dc !important;
+    cursor: pointer;
 }
 

@@ -3,7 +3,7 @@ $editando = ($modo ?? "crear") === "editar";
 ?>
 <form id="formUsuario" action="index.php" method="get" novalidate
       data-modo="<?= $editando ? "editar" : "crear" ?>">
-    <fieldset>
+    <fieldset style="width: 300px">
         <legend><?= $editando ? "Editar usuario" : "Nuevo Usuario" ?></legend>
 
         <input type="text" name="nombre" placeholder="Nombre"
