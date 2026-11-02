@@ -25,16 +25,36 @@ class Router {
         self::loadController($controllerName, $action);
     }
     
-    private static function loadController($controllerName, $action) {
-        // Construir ruta del archivo del controlador
+private static function loadController($controllerName, $action) {
+    try {
         $controllerFile = __DIR__ . "/controllers/{$controllerName}.php";
+
+        if (!file_exists($controllerFile)) {
+            throw new Exception("El controlador '{$controllerName}' no existe.");
+        }
+
         require_once $controllerFile;
-        
-        // Instanciar controlador
+
+        if (!class_exists($controllerName)) {
+            throw new Exception("La clase '{$controllerName}' no existe dentro del archivo.");
+        }
+
         $controller = new $controllerName();
 
-        // Ejecutar método
+        if (!method_exists($controller, $action)) {
+            throw new Exception("El método '{$action}' no existe en el controlador '{$controllerName}'.");
+        }
+
         $controller->$action();
+
+    } catch (Throwable $e) {
+        http_response_code(404);
+
+        $mensajeError = $e->getMessage();
+
+        $errorFile = __DIR__ . "/views/error.view.php";
+        require_once $errorFile;
     }
+}
 
 }

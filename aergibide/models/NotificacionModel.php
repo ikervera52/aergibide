@@ -14,12 +14,7 @@ class NotificacionModel {
                                 FROM notificaciones n
                                 INNER JOIN usuarios us ON n.usuario_id_r = us.id
                                 INNER JOIN preguntas pr ON n.pregunta_id = pr.id
-                                LEFT JOIN respuestas re ON re.id = (
-                                    SELECT MAX(id)
-                                    FROM respuestas
-                                    WHERE pregunta_id = n.pregunta_id
-                                      AND usuario_id = n.usuario_id_r
-                                )
+                                LEFT JOIN respuestas re ON re.id = n.respuesta_id
                                 WHERE n.usuario_id_p = :id
                                 ORDER BY n.id DESC");
         $query->execute(['id' => $id]);
@@ -31,5 +26,19 @@ class NotificacionModel {
         $query = $db->prepare("DELETE FROM notificaciones 
                                WHERE id = :id AND usuario_id_p = :usuario_id");
         return $query->execute(['id' => $id, 'usuario_id' => $usuarioId]);
+    }
+
+    public static function crearNotificacion($preguntaId, $usuarioRespondeId, $respuestaId) {
+        $db = Database::getConnection();
+        $query = $db->prepare("INSERT INTO notificaciones (usuario_id_p, usuario_id_r, pregunta_id, respuesta_id)
+                            SELECT usuario_id, :responde, id, :respuesta
+                            FROM preguntas
+                            WHERE id = :pregunta AND usuario_id != :responde2");
+        return $query->execute([
+            'responde'  => $usuarioRespondeId,
+            'respuesta' => $respuestaId,
+            'pregunta'  => $preguntaId,
+            'responde2' => $usuarioRespondeId
+        ]);
     }
 }

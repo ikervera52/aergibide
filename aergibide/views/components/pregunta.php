@@ -4,8 +4,14 @@
         <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$pregunta->usuario_id ?>" class="pregunta-usuario">
             <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$pregunta->ruta_archivo?>" alt="Foto de perfil">
             <small><?=$pregunta->nombre?></small>
+            <?php if($pregunta->tipo_usuario == "admin") : ?>
+            <i style="font-size: 15px; margin-left: -3px;" class="bi bi-check-circle"></i>
+            <?php endif; ?>
         </a>
         <div class="pregunta-meta">
+            <div class="categoriaPregunta">
+                <small><?=$pregunta->categoria?></small>
+            </div>
             <small><?=$pregunta->datetime?></small>
             <?php if($tipoUsuario == "admin") : ?>
                 <div class="acciones-admin-pregunta">
@@ -21,7 +27,7 @@
         </div>
     </div>
 
-    <a href="index.php?controller=respuestaController&id=<?=$pregunta->id?>" class="pregunta-body">
+    <a href="index.php?controller=RespuestaController&id=<?=$pregunta->id?>" class="pregunta-body">
         <h3><?=$pregunta->titulo?></h3>
         <p><?=mb_strimwidth($pregunta->contenido, 0, 100, "...")?></p>
     </a>
@@ -33,7 +39,7 @@
             <h4> Resuelta</h4>
         </div>
         <?php endif; ?>
-        <button onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
+        <button id="boton-accion" onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
         <small class="respuestas-count"><?=$pregunta->respuestas_count?> respuestas</small>
 
     </div>

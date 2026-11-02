@@ -4,15 +4,21 @@ require_once __DIR__ . '/../models/UsuarioModel.php';
 require_once __DIR__ . '/../models/PreguntaModel.php';
 require_once __DIR__ . '/../models/ArchivoModel.php';
 require_once __DIR__ . '/../models/RespuestaModel.php';
+require_once __DIR__ . '/../models/NotificacionModel.php';
 
 class RespuestaController extends BaseController {
     
     public function index() {
 
+        $pregunta = PreguntaModel::getById($_GET['id'] ?? 0);
+        if($pregunta == null){
+            $this->redirect("index.php");
+        }
+
         $this->render('respuestas.view.php', [
-            'pregunta' => PreguntaModel::getById($_GET['id'] ?? 0),
+            'pregunta' => $pregunta,
             'respuestas' => RespuestaModel::getByPreguntaId($_GET['id'] ?? 0),
-            'tipoUsuario' => $_SESSION["usuario"]["tipo"]
+            'usuario' => $_SESSION["usuario"]
         ]);
 
     }
@@ -78,6 +84,8 @@ class RespuestaController extends BaseController {
         ];
 
         $respuesta_id = RespuestaModel::create($datos);
+
+        NotificacionModel::crearNotificacion($pregunta_id, $_SESSION["usuario"]["id"], $respuesta_id);
 
         if (isset($_FILES['archivo']) && $_FILES['archivo']['error'] === UPLOAD_ERR_OK){
             $this->guardarArchivo($respuesta_id);

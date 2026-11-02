@@ -20,17 +20,30 @@ class UsuarioController extends BaseController {
 
         $usuario = UsuarioModel::getUserByEmail($datos['email'] ?? '');
 
+
+
+
+
         if ($usuario && $usuario->contrasena == ($datos['password'] ?? '')) {
 
+
+            if($usuario->estado == "inactivo"){
+                $this->json(['ok' => false, 'mensaje' => 'Usuario inactivo']);
+            } else{
             $_SESSION['usuario'] = [
                 'id'     => $usuario->id,
                 'nombre' => $usuario->nombre,
-                'tipo'   => $usuario->tipo
+                'tipo'   => $usuario->tipo,
+                'estado' => $usuario->estado
             ];
 
             $this->json(['ok' => true]);
+            }
+
+
+            
         } else {
-            $this->json(['ok' => false]);
+            $this->json(['ok' => false, 'mensaje' => 'Email o contraseña incorrectos']);
         }
     }
 
@@ -89,7 +102,8 @@ class UsuarioController extends BaseController {
         $usuarios = UsuarioModel::getAll();
         $this->render('menuadmin.view.php', [
             "usuarios" => $usuarios,
-            "preguntas" => $preguntas
+            "preguntas" => $preguntas,
+            "tipoUsuario" => $_SESSION["usuario"]["tipo"]
             ]);
         
         
@@ -222,6 +236,7 @@ class UsuarioController extends BaseController {
             "nombre"   => $_GET["nombre"] ?? "",
             "email"    => $_GET["email"] ?? "",
             "tipo"     => $_GET["tipo"] ?? "",
+            "estado"    => $_GET["estado"] ?? "",
             "password" => $_GET["password"] ?? ""
         ]);
        
@@ -229,24 +244,17 @@ class UsuarioController extends BaseController {
 
     }
 
-        public function filter(){
+    public function filter(){
         $texto = trim($_POST["buscar"] ?? "");
 
         if($texto === ""){
             $this->redirect("index.php?controller=UsuarioController&accion=show");
         }
 
-        $usuario = UsuarioModel::getUserByEmail($texto);
-
         $this->render('menuadmin.view.php', [
-            "usuarios" => $usuario ? [(array) $usuario] : []
+            "usuarios" => UsuarioModel::getUserByEmail2($texto)
             ]);
     }
-
-
-
-
-
 
 
 

@@ -43,7 +43,8 @@
 }
 
 .pregunta-imagen{
-    width: 100%;
+    width: auto;
+    max-height: 30rem;
     max-width: 40rem;
     height: auto;
     border-radius: 10px;
@@ -75,4 +76,28 @@ main div:nth-child(2){
 
 .contenido{
     white-space: pre-wrap;
+}
+
+input[value="Enviar"]:hover {
+    background: var(--color-principal) !important;
+}
+
+.btn-responder{
+    background-color: white !important;
+}
+
+#volverVistaRespuestas{
+    border-color: #ccc;
+}
+
+#volverVistaRespuestas:hover{
+    border-color: var(--color-negro);
+}
+
+#btn-responder{
+    border-color: #ccc;
+}
+
+#btn-responder:hover{
+    border-color: var(--color-negro);
 }

@@ -5,10 +5,13 @@
     $tieneNotifi = count(NotificacionModel::getByUsuarioId($_SESSION['usuario']['id'])) > 0;
     
     ?>
-    <div>
+    <div style="width: 100%; display: flex">
         <a href="#" id="btnNotificaciones">
-            <i class="bi <?= $tieneNotifi ? 'bi-bell-fill' : 'bi-bell' ?>"></i>
+            <i class="bi bi-bell"></i>
         </a>
+        <?php if ($tieneNotifi): ?>
+            <span id="puntoNotificaciones"></span>
+        <?php endif; ?>
     </div>
 
 <a href="index.php">
@@ -27,17 +30,17 @@
 </a>
 
 
-    <div class="iconosDerechaHeader">
+    <div style="width: 100%" class="iconosDerechaHeader">
         <?php if($_SESSION["usuario"]["tipo"] === "admin"):?>
         <a href="index.php?controller=UsuarioController&accion=show">
-            <i class="bi bi-reception-4" style="color:var(--color-rojo)"></i>
+            <i class="bi bi-gear" style="color:var(--color-negro); font-size:25px"></i>
         </a>
         <?php endif; ?>
         <a href="index.php?controller=UsuarioController&accion=perfil">
-            <i class="bi bi-person"></i>
+            <i style="font-size:25px" class="bi bi-person"></i>
         </a>
-        <a href="index.php?controller=UsuarioController&accion=logout">
-            <i class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
+        <a  href="index.php?controller=UsuarioController&accion=logout">
+            <i id="btn-logout" style="font-size:25px; color: var(--color-rojo)" class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
         </a>
         
     </div>

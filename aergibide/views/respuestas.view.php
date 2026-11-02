@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Aergibide | <?=$pregunta->titulo?></title>
     <link rel="icon" type="image/png" href="views/components/Aergibide.png">
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/viewsStyles/index.view.css">
@@ -19,17 +19,24 @@
 
     <main>
 
-        <div class="acciones">
-            <a href="index.php">Volver</a>
+        <div  class="acciones">
+            <a id="volverVistaRespuestas" href="index.php"> <i style="font-size: 18px; margin-left: -8px " class="bi bi-chevron-left"></i> Volver</a>
         </div>
 
         <div class="pregunta">
             <div class="pregunta-header">
-                <a href="index.php?controller=usuarioController" class="pregunta-usuario">
+                <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$pregunta->usuario_id ?>" class="pregunta-usuario">
                     <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$pregunta->ruta_archivo?>" alt="Foto de perfil">
                     <small><?=$pregunta->nombre?></small>
+                    <?php if($pregunta->tipo_usuario == "admin") : ?>
+                    <i style="font-size: 15px; margin-left: -3px;" class="bi bi-check-circle"></i>
+                    <?php endif; ?>
                 </a>
+                
                 <div class="pregunta-meta">
+                    <div class="categoriaPregunta">
+                        <small><?=$pregunta->categoria?></small>
+                    </div>
                     <small><?=$pregunta->datetime?></small>
                 </div>
             </div>
@@ -43,7 +50,7 @@
             </div>
             
             <div class="pregunta-footer">
-                <button onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" id="btn-misma-pregunta-<?=$pregunta->id?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
+                <button id="boton-accion" onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" id="btn-misma-pregunta-<?=$pregunta->id?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
 
                 <small class="respuestas-count"><?=$pregunta->respuestas_count?> respuestas</small>
 
@@ -67,25 +74,33 @@
                     <?php endif; ?>
 
                     <div class="pregunta-header">
-                        <a href="index.php?controller=usuarioController" class="respuesta-usuario">
+                        <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$respuesta->usuario_id ?>"  class="respuesta-usuario">
                             <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$respuesta->ruta_archivo?>" alt="Foto de perfil">
                             <small><?=$respuesta->nombre?></small>
+                            <?php if($respuesta->tipo_usuario == "admin") : ?>
+                            <i style="font-size: 15px; margin-left: -3px;" class="bi bi-check-circle"></i>
+                            <?php endif; ?>
                         </a>
 
                         <div class="pregunta-meta">
                             <small><?=$respuesta->datetime?></small>
-                            <?php if($tipoUsuario == "admin") : ?>
+                            <?php if($usuario["tipo"] == "admin" || $pregunta->usuario_id == $usuario["id"]) : ?>
                                 <div class="acciones-admin-pregunta">
                                     <i class="bi bi-three-dots btn-menu-admin" onclick="toggleMenuAdmin(this)"></i>
                                     
+
                                     <div class="menu-desplegable-admin oculto">
-                                        <button class="opcion-eliminar" onclick="eliminarRespuesta(this, <?=$respuesta->id ?? 0; ?>)">
-                                            <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
-                                        </button>
+                                        <?php if($usuario["tipo"] == "admin") :?>
+                                            <button class="opcion-eliminar" onclick="eliminarRespuesta(this, <?=$respuesta->id ?? 0; ?>)">
+                                                <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                        <?php endif; ?>
                                         
-                                        <button class="opcion-seleccionar" onclick="seleccionarRespuesta(this, <?=$respuesta->id ?? 0; ?>, <?=$pregunta->id?>)">
-                                            <i style="color: var(--color-verde)"class="bi bi-check2-circle"></i> Correcta
-                                        </button>
+                                        <?php if($pregunta->estado == "abierta" && $pregunta->usuario_id == $usuario["id"]) :?>
+                                            <button class="opcion-seleccionar" onclick="seleccionarRespuesta(this, <?=$respuesta->id ?? 0; ?>, <?=$pregunta->id?>)">
+                                                <i style="color: var(--color-verde)"class="bi bi-check2-circle"></i> Correcta
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -100,7 +115,7 @@
                     </div>
 
                     <div class="pregunta-footer">
-                        <button onclick="votarRespuesta(<?=$respuesta->id?>, this)" class="<?=$respuesta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" ><i class="bi bi-arrow-up-circle"></i><?=$respuesta->puntuacion?></button>
+                        <button id="boton-accion" onclick="votarRespuesta(<?=$respuesta->id?>, this)" class="<?=$respuesta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" ><i class="bi bi-arrow-up-circle"></i><?=$respuesta->puntuacion?></button>
                     </div>
                 </div>
 
@@ -114,7 +129,7 @@
                     <input type="hidden" name="pregunta_id" value="<?=$pregunta->id?>">
                     <textarea name="contenido" id="contenido" placeholder="Escribe tu respuesta aquí..." required></textarea>
                     <input type="file" id="archivo" name="archivo">
-                 
+                
                     <?php if(isset($error)) : ?>
 
                     <small style="color: var(--color-rojo);"><?=$error?></small>

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Cual es tu duda?</title>
+    <title>Aergibide | Pregunta</title>
 
+    <link rel="icon" type="image/png" href="views/components/Aergibide.png">
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/viewsStyles/pregunta_form.view.css">
     <link rel="stylesheet" href="styles/componentsStyles/pregunta.css">
@@ -27,6 +28,15 @@
             <label for="contenido">Pregunta</label>
             <textarea name="contenido" id="contenido" placeholder="¿Cual es tu duda?"><?= isset($old['contenido']) ? $old['contenido'] : '' ?></textarea>
 
+            
+            <label for="categoria">Categoría</label>
+            <select name="categoria" id="categoria">
+                    <option value="" disabled selected>Elige la categoría</option>
+                <?php foreach($categorias as $categoria) : ?>
+                    <option value="<?=$categoria->id?>"><?=$categoria->nombre?></option>
+                <?php endforeach; ?>
+            </select>
+            
             <label for="archivo">Archivos</label>
 
             <label for="archivo" class="archivos" id="archivos">
@@ -41,7 +51,7 @@
             <?php endif; ?>
 
             <div class="acciones">
-                <a href="index.php">Cancelar</a>
+                <a id="boton-cancelar" href="index.php">Cancelar</a>
                 
                 <input type="hidden" name="tipo-interaccion" value="pregunta">
                 <input type="hidden" name="accion" value="store">

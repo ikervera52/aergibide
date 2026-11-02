@@ -12,7 +12,8 @@ async function votarRespuesta(respuestaId, btnVotar) {
         });
             
         if(response.ok){
-                btnVotar.classList.remove("seleccionada");  
+                btnVotar.classList.remove("seleccionada"); 
+                window.location.reload(); 
             }else{
                 alert("Problemas con el servidor. Intentalo más tarde.");
             }
@@ -27,7 +28,8 @@ async function votarRespuesta(respuestaId, btnVotar) {
         });
 
         if(response.ok){
-            btnVotar.classList.add("seleccionada");  
+            btnVotar.classList.add("seleccionada");
+            window.location.reload();   
         }else{
             alert("Problemas con el servidor. Intentalo más tarde.");
         }

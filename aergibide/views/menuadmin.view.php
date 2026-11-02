@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles/viewsStyles/menuadmin.view.css">
     <!-- Biblioteca de Iconos-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <?php require "layout/header.php"; ?>
@@ -37,11 +38,8 @@
                     <div>
                         <input type="text" name="buscar" id="buscar" placeholder="Que email quieres buscar...">
                         <input type="hidden" name="accion" value="filter">
-                        <button class="btn-buscar" type="submit"><i class="bi bi-search"></i></button>
+                        <button class="btn-buscar" type="submit"><i style="color: var(--color-negro)" class="bi bi-search"></i></button>
                     </div>
-                    <button class="filtros">
-                    <i class="bi bi-filter"></i>
-                    </button>
                 </form>
             </div>
             <table>
@@ -49,13 +47,14 @@
                     <?php if (empty($usuarios)): ?>
                                 <p>No se encontró ningún usuario con ese email.</p>
                             <?php else: ?>
-                                <tr><th>Nombre</th><th>Email</th><th>Tipo</th><th>Acciones</th></tr>
+                                <tr><th>Nombre</th><th>Email</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr>
                             <?php foreach($usuarios as $valor):?>
                                 <tr><td><?= $valor["nombre"]?>
                                 </td><td><?= $valor["email"]?></td>
                                 <td><?= $valor["tipo"]?></td>
+                                <td><?= $valor["estado"]?></td>
 
-                                <td>
+                                <td style="display: flex;">
                                     <!-- EDITAR: redirige a la página de edición con el id -->
                                     <form action="index.php" method="get" >
                                         <input type="hidden" name="controller" value="UsuarioController">
@@ -65,7 +64,7 @@
                                     </form>
 
                                     <!-- ELIMINAR: borra el usuario con ese id -->
-                                    <form action="index.php" method="get" >
+                                    <form action="index.php" method="get" onsubmit="confirmarBorrado(event, this);">
                                         <input type="hidden" name="controller" value="UsuarioController">
                                         <input type="hidden" name="accion" value="destroy">
                                         <input type="hidden" name="id" value="<?= $valor['id'] ?>">
@@ -84,7 +83,8 @@
             </div>
         </section>
         
-        <section id="preguntasDestacadas" class="seccion" <?= $pestana !== "destacadas" ? "hidden" : "" ?>>   
+        <section id="preguntasDestacadas" class="seccion" <?= $pestana !== "destacadas" ? "hidden" : "" ?>>  
+            <h1 style="margin-bottom: 4rem">Top 20 mayores dudas</h1> 
             <?php foreach($preguntas as $pregunta) :
             
             
@@ -95,6 +95,27 @@
 
     </main>
     <?php require "layout/footer.php"; ?>
+
+<script>
+function confirmarBorrado(event, formulario) {
+
+    event.preventDefault();
+
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se podrá deshacer",
+        showCancelButton: true,
+        confirmButtonColor: '#5F46CB',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            formulario.submit();
+        }
+    });
+}
+</script>
 
 </body>
 </html>

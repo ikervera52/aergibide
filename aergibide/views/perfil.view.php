@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aergibide | Perfil</title>
+    <link rel="icon" type="image/png" href="views/components/Aergibide.png">
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/componentsStyles/pregunta.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -26,14 +27,17 @@ if (!$esMio) {
     <!-- Cabecera del perfil -->
     <section class="perfilCabecera">
         <img id="perfilFoto" src="<?= htmlspecialchars($usuario->ruta_archivo ?: 'uploads/default-avatar.png') ?>"
-             alt="Foto de perfil" class="fotoPerfil">
+            alt="Foto de perfil" class="fotoPerfil">
 
         <div class="perfilDatos">
-            <h1 id="perfilNombre"><?= htmlspecialchars($usuario->nombre) ?></h1>
+            <div class="perfilVerificado">
+                <h1 id="perfilNombre"><?= htmlspecialchars($usuario->nombre) ?></h1>
+                <?php if($usuario->tipo == "admin") : ?>
+                    <i class="bi bi-check-circle-fill"></i>
+                <?php endif; ?>
+            </div>
 
-            <?php if ($esMio): ?>
-                <p id="perfilEmail"><?= htmlspecialchars($usuario->email) ?></p>
-            <?php endif; ?>
+        <p id="perfilEmail"><?= htmlspecialchars($usuario->email) ?></p>
 
             <small>Desde <?= date('d/m/Y', strtotime($usuario->datetime)) ?></small>
         </div>
@@ -49,7 +53,7 @@ if (!$esMio) {
     <?php if ($esMio): ?>
     <form id="formEditar" hidden>
         <label for="inputFoto" class="btn-subir-foto">
-            <i class="bi bi-camera"></i> Cambiar foto de perfil
+            <i class="bi bi-camera"></i> <span id="textoFoto">Cambiar foto de perfil</span>
         </label>
         <input type="file" id="inputFoto" name="foto" accept="image/png,image/jpeg,image/webp" hidden>
         <input type="text" id="inputNombre" name="nombre" placeholder="Nombre"
@@ -133,6 +137,16 @@ const mensajeEditar = document.querySelector('#mensajeEditar');
 const perfilFoto = document.querySelector('#perfilFoto');
 const perfilNombre = document.querySelector('#perfilNombre');
 const perfilEmail = document.querySelector('#perfilEmail');
+const textoFoto = document.querySelector('#textoFoto');
+const textoOriginal = textoFoto.textContent;
+
+inputFoto.addEventListener('change', function () {
+    if (inputFoto.files.length > 0) {
+        textoFoto.textContent = inputFoto.files[0].name;
+    } else {
+        textoFoto.textContent = textoOriginal;
+    }
+});
 
 function abrirFormulario(evento) {
     evento.preventDefault();
@@ -143,6 +157,7 @@ function cancelarEdicion() {
     inputNombre.value = perfilNombre.textContent;
     inputEmail.value = perfilEmail.textContent;
     inputFoto.value = '';
+    textoFoto.textContent = textoOriginal;
     mensajeEditar.textContent = '';
     formEditar.hidden = true;
 }
@@ -174,6 +189,9 @@ async function guardarPerfil(evento) {
         });
 
         inputFoto.value = '';
+        formEditar.hidden = true;
+        inputFoto.value = '';
+        textoFoto.textContent = textoOriginal;
         formEditar.hidden = true;
     } else {
         mensajeEditar.textContent = resultado.error;
