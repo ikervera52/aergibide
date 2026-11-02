@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <a href="index.php?controller=respuestaController&id=<?=$pregunta->id?>" class="pregunta-body">
+    <a href="index.php?controller=RespuestaController&id=<?=$pregunta->id?>" class="pregunta-body">
         <h3><?=$pregunta->titulo?></h3>
         <p><?=mb_strimwidth($pregunta->contenido, 0, 100, "...")?></p>
     </a>

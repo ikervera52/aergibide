@@ -25,7 +25,7 @@
 
         <div class="pregunta">
             <div class="pregunta-header">
-                <a href="index.php?controller=usuarioController" class="pregunta-usuario">
+                <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$pregunta->usuario_id ?>" class="pregunta-usuario">
                     <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$pregunta->ruta_archivo?>" alt="Foto de perfil">
                     <small><?=$pregunta->nombre?></small>
                     <?php if($pregunta->tipo_usuario == "admin") : ?>
@@ -74,7 +74,7 @@
                     <?php endif; ?>
 
                     <div class="pregunta-header">
-                        <a href="index.php?controller=usuarioController" class="respuesta-usuario">
+                        <a href="index.php?controller=UsuarioController&accion=perfil&id=<?= (int)$respuesta->usuario_id ?>"  class="respuesta-usuario">
                             <img  style="width: 30px; height: 30px; border-radius: 50%; background-color: var(--color-secundario);" class="avatar" src="<?=$respuesta->ruta_archivo?>" alt="Foto de perfil">
                             <small><?=$respuesta->nombre?></small>
                             <?php if($respuesta->tipo_usuario == "admin") : ?>

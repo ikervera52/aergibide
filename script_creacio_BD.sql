@@ -55,7 +55,8 @@ CREATE TABLE preguntas (
     FOREIGN KEY (categoria_pregunta_id) REFERENCES categorias_preguntas (id)
     ON UPDATE CASCADE,
   CONSTRAINT fk_preguntas_usuario 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
+    FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+    ON DELETE CASCADE ON UPDATE CASCADE 
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
@@ -74,6 +75,7 @@ CREATE TABLE respuestas (
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_respuestas_usuario 
     FOREIGN KEY (usuario_id) REFERENCES usuarios (id) 
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
