@@ -177,7 +177,7 @@ header a:hover i {
 }
 
 header a[href*="accion=logout"]:hover i {
-    color: red !important;
+    color: redpuntoNotificaciones !important;
 }
 
 
@@ -249,9 +249,7 @@ header a[href*="accion=logout"]:hover i {
 }
 
 #puntoNotificaciones {
-    position: absolute;
-    top: 0;
-    right: 0;
+
     width: 10px;
     height: 10px;
     background-color: var(--color-rojo);

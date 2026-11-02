@@ -5,13 +5,13 @@
     $tieneNotifi = count(NotificacionModel::getByUsuarioId($_SESSION['usuario']['id'])) > 0;
     
     ?>
-    <div style="width: 100%">
+    <div style="width: 100%; display: flex">
         <a href="#" id="btnNotificaciones">
             <i class="bi bi-bell"></i>
-            <?php if ($tieneNotifi): ?>
-                <span id="puntoNotificaciones"></span>
-            <?php endif; ?>
         </a>
+        <?php if ($tieneNotifi): ?>
+            <span id="puntoNotificaciones"></span>
+        <?php endif; ?>
     </div>
 
 <a href="index.php">
