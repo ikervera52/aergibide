@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aergibide | Perfil</title>
+    <link rel="icon" type="image/png" href="views/components/Aergibide.png">
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/componentsStyles/pregunta.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -26,7 +27,7 @@ if (!$esMio) {
     <!-- Cabecera del perfil -->
     <section class="perfilCabecera">
         <img id="perfilFoto" src="<?= htmlspecialchars($usuario->ruta_archivo ?: 'uploads/default-avatar.png') ?>"
-             alt="Foto de perfil" class="fotoPerfil">
+            alt="Foto de perfil" class="fotoPerfil">
 
         <div class="perfilDatos">
             <div class="perfilVerificado">

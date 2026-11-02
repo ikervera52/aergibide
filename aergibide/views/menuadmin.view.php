@@ -38,11 +38,8 @@
                     <div>
                         <input type="text" name="buscar" id="buscar" placeholder="Que email quieres buscar...">
                         <input type="hidden" name="accion" value="filter">
-                        <button class="btn-buscar" type="submit"><i class="bi bi-search"></i></button>
+                        <button class="btn-buscar" type="submit"><i style="color: var(--color-negro)" class="bi bi-search"></i></button>
                     </div>
-                    <button class="filtros">
-                    <i class="bi bi-filter"></i>
-                    </button>
                 </form>
             </div>
             <table>
@@ -57,7 +54,7 @@
                                 <td><?= $valor["tipo"]?></td>
                                 <td><?= $valor["estado"]?></td>
 
-                                <td>
+                                <td style="display: flex;">
                                     <!-- EDITAR: redirige a la página de edición con el id -->
                                     <form action="index.php" method="get" >
                                         <input type="hidden" name="controller" value="UsuarioController">
@@ -86,7 +83,8 @@
             </div>
         </section>
         
-        <section id="preguntasDestacadas" class="seccion" <?= $pestana !== "destacadas" ? "hidden" : "" ?>>   
+        <section id="preguntasDestacadas" class="seccion" <?= $pestana !== "destacadas" ? "hidden" : "" ?>>  
+            <h1 style="margin-bottom: 4rem">Top 20 mayores dudas</h1> 
             <?php foreach($preguntas as $pregunta) :
             
             

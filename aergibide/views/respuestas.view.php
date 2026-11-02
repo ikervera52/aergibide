@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Aergibide | <?=$pregunta->titulo?></title>
     <link rel="icon" type="image/png" href="views/components/Aergibide.png">
     <link rel="stylesheet" href="styles/style_general.css">
     <link rel="stylesheet" href="styles/viewsStyles/index.view.css">
@@ -50,7 +50,7 @@
             </div>
             
             <div class="pregunta-footer">
-                <button onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" id="btn-misma-pregunta-<?=$pregunta->id?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
+                <button id="boton-accion" onclick="guardarMismaPregunta(<?=$pregunta->id?>, this)" class="<?=$pregunta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" id="btn-misma-pregunta-<?=$pregunta->id?>">Misma pregunta <i class="bi bi-hand-index-thumb"></i></button>
 
                 <small class="respuestas-count"><?=$pregunta->respuestas_count?> respuestas</small>
 
@@ -84,16 +84,19 @@
 
                         <div class="pregunta-meta">
                             <small><?=$respuesta->datetime?></small>
-                            <?php if($tipoUsuario == "admin") : ?>
+                            <?php if($usuario["tipo"] == "admin" || $pregunta->usuario_id == $usuario["id"]) : ?>
                                 <div class="acciones-admin-pregunta">
                                     <i class="bi bi-three-dots btn-menu-admin" onclick="toggleMenuAdmin(this)"></i>
                                     
+
                                     <div class="menu-desplegable-admin oculto">
-                                        <button class="opcion-eliminar" onclick="eliminarRespuesta(this, <?=$respuesta->id ?? 0; ?>)">
-                                            <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
-                                        </button>
+                                        <?php if($usuario["tipo"] == "admin") :?>
+                                            <button class="opcion-eliminar" onclick="eliminarRespuesta(this, <?=$respuesta->id ?? 0; ?>)">
+                                                <i style="color: var(--color-rojo)"class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                        <?php endif; ?>
                                         
-                                        <?php if($pregunta->estado == "abierta") :?>
+                                        <?php if($pregunta->estado == "abierta" && $pregunta->usuario_id == $usuario["id"]) :?>
                                             <button class="opcion-seleccionar" onclick="seleccionarRespuesta(this, <?=$respuesta->id ?? 0; ?>, <?=$pregunta->id?>)">
                                                 <i style="color: var(--color-verde)"class="bi bi-check2-circle"></i> Correcta
                                             </button>
@@ -112,7 +115,7 @@
                     </div>
 
                     <div class="pregunta-footer">
-                        <button onclick="votarRespuesta(<?=$respuesta->id?>, this)" class="<?=$respuesta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" ><i class="bi bi-arrow-up-circle"></i><?=$respuesta->puntuacion?></button>
+                        <button id="boton-accion" onclick="votarRespuesta(<?=$respuesta->id?>, this)" class="<?=$respuesta->marcada_por_usuario == 1 ? "seleccionada" : ""?>" ><i class="bi bi-arrow-up-circle"></i><?=$respuesta->puntuacion?></button>
                     </div>
                 </div>
 

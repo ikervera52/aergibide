@@ -38,6 +38,7 @@ class PreguntaModel {
         $db = Database::getConnection();
         $query = $db->prepare("SELECT 
                                     pr.id,
+                                    pr.usuario_id,
                                     pr.titulo, 
                                     pr.contenido, 
                                     pr.datetime, 
