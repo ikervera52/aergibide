@@ -7,7 +7,10 @@
     ?>
     <div>
         <a href="#" id="btnNotificaciones">
-            <i class="bi <?= $tieneNotifi ? 'bi-bell-fill' : 'bi-bell' ?>"></i>
+            <i class="bi bi-bell"></i>
+            <?php if ($tieneNotifi): ?>
+                <span id="puntoNotificaciones"></span>
+            <?php endif; ?>
         </a>
     </div>
 
