@@ -39,8 +39,8 @@
         <a href="index.php?controller=UsuarioController&accion=perfil">
             <i style="font-size:25px" class="bi bi-person"></i>
         </a>
-        <a href="index.php?controller=UsuarioController&accion=logout">
-            <i style="font-size:25px; color: var(--color-rojo)" class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
+        <a  href="index.php?controller=UsuarioController&accion=logout">
+            <i id="btn-logout" style="font-size:25px; color: var(--color-rojo)" class="bi bi-box-arrow-right" style="color:var(--color-rojo)"></i>
         </a>
         
     </div>
