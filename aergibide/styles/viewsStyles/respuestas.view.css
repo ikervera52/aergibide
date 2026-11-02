@@ -85,3 +85,19 @@ input[value="Enviar"]:hover {
 .btn-responder{
     background-color: white !important;
 }
+
+#volverVistaRespuestas{
+    border-color: #ccc;
+}
+
+#volverVistaRespuestas:hover{
+    border-color: var(--color-negro);
+}
+
+#btn-responder{
+    border-color: #ccc;
+}
+
+#btn-responder:hover{
+    border-color: var(--color-negro);
+}

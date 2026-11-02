@@ -84,14 +84,25 @@
     cursor: pointer;
 
 }
+
+.contenedorFiltrosHijo > button[type=submit]:hover {
+    background-color: var(--color-principal);
+}
+
+#btnLimpiar:hover {
+    border-color: var(--color-negro);
+}
+
 .filtros:hover{
     background-color: var(--color-principal);
 }
 
-
+.bi-search:hover{
+    color: var(--color-principal) !important;
+}
 
 #btnLimpiar{
     background-color: var(--color-blanco);
     color: var(--color-negro);
-    border: .3px solid var(--color-negro);
+    border: .3px solid #ccc;
 }
