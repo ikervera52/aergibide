@@ -243,3 +243,17 @@ header a[href*="accion=logout"]:hover i {
 #boton-volver:hover{
     border-color: var(--color-negro);
 }
+
+#btnNotificaciones {
+    position: relative;
+}
+
+#puntoNotificaciones {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-rojo);
+    border-radius: 50%;
+}
