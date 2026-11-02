@@ -53,7 +53,7 @@ if (!$esMio) {
     <?php if ($esMio): ?>
     <form id="formEditar" hidden>
         <label for="inputFoto" class="btn-subir-foto">
-            <i class="bi bi-camera"></i> Cambiar foto de perfil
+            <i class="bi bi-camera"></i> <span id="textoFoto">Cambiar foto de perfil</span>
         </label>
         <input type="file" id="inputFoto" name="foto" accept="image/png,image/jpeg,image/webp" hidden>
         <input type="text" id="inputNombre" name="nombre" placeholder="Nombre"
@@ -137,6 +137,16 @@ const mensajeEditar = document.querySelector('#mensajeEditar');
 const perfilFoto = document.querySelector('#perfilFoto');
 const perfilNombre = document.querySelector('#perfilNombre');
 const perfilEmail = document.querySelector('#perfilEmail');
+const textoFoto = document.querySelector('#textoFoto');
+const textoOriginal = textoFoto.textContent;
+
+inputFoto.addEventListener('change', function () {
+    if (inputFoto.files.length > 0) {
+        textoFoto.textContent = inputFoto.files[0].name;
+    } else {
+        textoFoto.textContent = textoOriginal;
+    }
+});
 
 function abrirFormulario(evento) {
     evento.preventDefault();
@@ -147,6 +157,7 @@ function cancelarEdicion() {
     inputNombre.value = perfilNombre.textContent;
     inputEmail.value = perfilEmail.textContent;
     inputFoto.value = '';
+    textoFoto.textContent = textoOriginal;
     mensajeEditar.textContent = '';
     formEditar.hidden = true;
 }
@@ -178,6 +189,9 @@ async function guardarPerfil(evento) {
         });
 
         inputFoto.value = '';
+        formEditar.hidden = true;
+        inputFoto.value = '';
+        textoFoto.textContent = textoOriginal;
         formEditar.hidden = true;
     } else {
         mensajeEditar.textContent = resultado.error;
