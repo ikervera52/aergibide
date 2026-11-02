@@ -19,8 +19,8 @@
 
     <main>
 
-        <div class="acciones">
-            <a href="index.php"> <i style="font-size: 18px; margin-left: -8px " class="bi bi-chevron-left"></i> Volver</a>
+        <div  class="acciones">
+            <a id="volverVistaRespuestas" href="index.php"> <i style="font-size: 18px; margin-left: -8px " class="bi bi-chevron-left"></i> Volver</a>
         </div>
 
         <div class="pregunta">
