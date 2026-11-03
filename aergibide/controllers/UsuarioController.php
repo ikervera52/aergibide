@@ -112,7 +112,8 @@ class UsuarioController extends BaseController {
     }
     
     public function store() {
-        $nombre = $_GET["nombre"] ?? "";
+        try{
+            $nombre = $_GET["nombre"] ?? "";
         $email = $_GET["email"] ?? "";
         $tipo = $_GET["tipo"] ?? "";
         $password = $_GET["password"] ?? "";
@@ -126,6 +127,11 @@ class UsuarioController extends BaseController {
         ];
         UsuarioModel::create($usuario);
         BaseController::redirect("index.php?controller=UsuarioController&accion=show");
+        }
+        catch(\Exception $e){
+            $emailExiste = "El email ya esta en uso. Vuelve a intentarlo.";
+            BaseController::render("menuadmin.view.php", ["emailExiste" => $emailExiste, "usuarios" => UsuarioModel::getAll()]);
+        }
     }
     
     public function destroy() {

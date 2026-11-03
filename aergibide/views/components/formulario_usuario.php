@@ -34,6 +34,8 @@ $editando = ($modo ?? "crear") === "editar";
 
         <button type="submit"><?= $editando ? "Guardar cambios" : "Registrar" ?></button>
 
+        <small id="mensaje-error" style="color: red;"><?=$emailExiste ?? ""?></small>
+
         <input type="hidden" name="controller" value="UsuarioController">
         <input type="hidden" name="accion" value="<?= $editando ? "update" : "store" ?>">
         <?php if ($editando): ?>
@@ -81,4 +83,26 @@ $editando = ($modo ?? "crear") === "editar";
     for (const nombre in reglas) {
         form.elements[nombre].addEventListener("blur", () => validarCampo(nombre));
     }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mensajeError = document.getElementById("mensaje-error");
+
+        // Si existe el mensaje de error en pantalla
+        if (mensajeError && mensajeError.innerText.trim() !== "") {
+            // Seleccionamos todos los campos del formulario (inputs y selects si hubiese)
+            const inputs = document.querySelectorAll("form input, form select");
+
+            inputs.forEach(input => {
+                // Escuchamos el evento 'focus' (click o tabulaciones) y 'input' (al escribir)
+                input.addEventListener("focus", borrarMensaje);
+                input.addEventListener("input", borrarMensaje);
+            });
+
+            function borrarMensaje() {
+                mensajeError.innerText = ""; // Limpia el texto del <small>
+            }
+        }
+    });
 </script>
