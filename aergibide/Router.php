@@ -11,16 +11,16 @@ class Router {
 
         // Determinar controlador (por defecto EmpleadoController)
         $controllerName = $_POST['controller'] ?? $_GET['controller'] ?? 'PreguntaController';
+
+                // Determinar acción (por defecto index)
+        $action = $_POST['accion'] ?? $_GET['accion'] ?? 'index';
         
         // Mirar por cada peticion si el usuario esta logeado.
-        if($controllerName != 'UsuarioController'){
+        if (!isset($_SESSION["usuario"]) && !($controllerName == 'UsuarioController' && ($action == 'index' || $action == 'login'))) {
             $requireLogin = new BaseController();
             $requireLogin->requireLogin();
         }
 
-        // Determinar acción (por defecto index)
-        $action = $_POST['accion'] ?? $_GET['accion'] ?? 'index';
-        
         // Cargar y ejecutar controlador
         self::loadController($controllerName, $action);
     }
