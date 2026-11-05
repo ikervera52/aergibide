@@ -36,7 +36,7 @@
         <div class="buscadorConFiltro">
             <form class="buscador" id="formBuscador" action="index.php" method="POST">
                 <div>
-                    <input type="text" name="buscar" id="buscar" placeholder="Que quieres buscar..." value="<?=$textoBuscado ?? "" ?>">
+                    <input type="text" name="buscar" id="buscar" placeholder="Que quieres buscar Hola buenas tardes..." value="<?=$textoBuscado ?? "" ?>">
                     <input type="hidden" name="accion" value="filter">
                     <button class="btn-buscar" type="submit"><i class="bi bi-search" style="color: var(--color-negro)" ></i></button>
                 </div>
